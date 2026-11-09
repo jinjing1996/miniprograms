@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>童话星球 · 儿童故事生成</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- SVG 图标雪碧图(Lucide 风格线性图标) -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+      <symbol id="i-wand" viewBox="0 0 24 24"><path d="M15 4V2"/><path d="M15 16v-2"/><path d="M8 9h2"/><path d="M20 9h2"/><path d="M17.8 11.8 19 13"/><path d="M15 9h.01"/><path d="M17.8 6.2 19 5"/><path d="m3 21 9-9"/><path d="M12.2 6.2 11 5"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+      <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+      <symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol>
+      <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="phone">
+    <div class="statusbar">
+      <span class="time">9:41</span>
+      <span class="signal">●●● 5G ▮▮▮</span>
+    </div>
+
+    <!-- ========== 页面1:首页 / 创作 ========== -->
+    <section class="page active" id="page-home">
+      <header class="navbar">
+        <div class="brand">
+          <span class="logo"><svg class="ic"><use href="#i-moon"/></svg></span>
+          <div>
+            <h1>童话星球</h1>
+            <p>说出想法,生成专属故事</p>
+          </div>
+        </div>
+        <button class="icon-btn" data-go="page-library" title="我的故事"><svg class="ic"><use href="#i-book"/></svg></button>
+      </header>
+
+      <div class="scroll">
+        <!-- 主输入 -->
+        <div class="hero-card">
+          <div class="hero-label">
+            <svg class="ic"><use href="#i-sparkles"/></svg>
+            <span>今天想听什么故事?</span>
+          </div>
+          <textarea id="phrase" rows="3" maxlength="60" placeholder="例如:小兔子想去月亮上看看,但它害怕黑夜……"></textarea>
+          <div class="hero-foot">
+            <small id="phrase-count">0/60</small>
+            <button class="link-btn" id="btn-inspire"><svg class="ic"><use href="#i-bulb"/></svg>换个灵感</button>
+          </div>
+        </div>
+
+        <!-- 关键词 -->
+        <p class="section-label">点选关键词,让故事更贴心 <small id="kw-count">0/5</small></p>
+        <div class="chip-row" id="chip-group">
+          <button class="chip" data-chip="小兔子">小兔子</button>
+          <button class="chip" data-chip="恐龙">恐龙</button>
+          <button class="chip" data-chip="公主">公主</button>
+          <button class="chip" data-chip="宇航员">宇航员</button>
+          <button class="chip" data-chip="森林">森林</button>
+          <button class="chip" data-chip="海底">海底</button>
+          <button class="chip" data-chip="月亮">月亮</button>
+          <button class="chip" data-chip="魔法">魔法</button>
+          <button class="chip" data-chip="友谊">友谊</button>
+          <button class="chip" data-chip="勇敢">勇敢</button>
+          <button class="chip add" id="chip-add"><svg class="ic"><use href="#i-plus"/></svg>自定义</button>
+          <input class="chip-input" id="kw-input" type="text" placeholder="输入后回车" maxlength="10" hidden />
+        </div>
+
+        <div class="spacer"></div>
+      </div>
+
+      <footer class="bottom-bar">
+        <button class="primary-btn big" id="btn-generate">
+          <svg class="ic"><use href="#i-wand"/></svg>
+          <span>生成故事</span>
+        </button>
+      </footer>
+    </section>
+
+    <!-- ========== 页面2:生成中 ========== -->
+    <section class="page" id="page-loading">
+      <div class="loading-wrap">
+        <div class="planet">
+          <div class="ring"></div>
+          <svg class="ic moon"><use href="#i-moon"/></svg>
+          <svg class="ic star s1"><use href="#i-sparkles"/></svg>
+          <svg class="ic star s2"><use href="#i-sparkles"/></svg>
+        </div>
+        <h2 id="loading-title">正在构思故事…</h2>
+        <p class="loading-sub" id="loading-sub">魔法师正在翻阅童话书</p>
+        <div class="progress"><div class="bar" id="loading-bar"></div></div>
+        <ul class="steps" id="loading-steps">
+          <li><svg class="ic"><use href="#i-check"/></svg><svg class="ic o"><use href="#i-circle"/></svg>理解关键词</li>
+          <li><svg class="ic"><use href="#i-check"/></svg><svg class="ic o"><use href="#i-circle"/></svg>编写故事情节</li>
+          <li><svg class="ic"><use href="#i-check"/></svg><svg class="ic o"><use href="#i-circle"/></svg>绘制插画</li>
+          <li><svg class="ic"><use href="#i-check"/></svg><svg class="ic o"><use href="#i-circle"/></svg>生成朗读音频</li>
+        </ul>
+        <button class="ghost-btn" data-go="page-home">取消</button>
+      </div>
+    </section>
+
+    <!-- ========== 页面3:故事阅读 ========== -->
+    <section class="page" id="page-story">
+      <header class="navbar compact">
+        <button class="icon-btn" data-go="page-home"><svg class="ic"><use href="#i-left"/></svg></button>
+        <h2 id="story-title">小兔子的月亮之旅</h2>
+        <button class="icon-btn" id="btn-share"><svg class="ic"><use href="#i-more"/></svg></button>
+      </header>
+
+      <div class="scroll">
+        <div class="illustration" id="illustration">
+          <img class="illu-img" id="illu-img" src="assets/story/p1.jpg" alt="故事插画" />
+          <div class="illu-loading"><svg class="ic"><use href="#i-image"/></svg>正在重新绘制…</div>
+          <span class="page-badge" id="page-badge">1 / 4</span>
+          <button class="regen-btn" title="换一张插画"><svg class="ic"><use href="#i-refresh"/></svg>换插画</button>
+        </div>
+
+        <div class="dots" id="dots"></div>
+
+        <div class="story-text card" id="story-text"></div>
+
+        <div class="story-actions">
+          <button class="action" id="btn-listen">
+            <svg class="ic play"><use href="#i-volume"/></svg>
+            <svg class="ic stop"><use href="#i-pause"/></svg>
+            <span>听故事</span>
+          </button>
+          <button class="action accent" data-go="page-read">
+            <svg class="ic"><use href="#i-mic"/></svg>
+            <span>我来跟读</span>
+          </button>
+          <button class="action" id="btn-fav">
+            <svg class="ic"><use href="#i-star"/></svg>
+            <span>收藏</span>
+          </button>
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <footer class="bottom-bar split">
+        <button class="secondary-btn" id="btn-prev"><svg class="ic"><use href="#i-left"/></svg>上一页</button>
+        <button class="primary-btn" id="btn-next"><span>下一页</span><svg class="ic"><use href="#i-right"/></svg></button>
+      </footer>
+    </section>
+
+    <!-- ========== 页面4:跟读 ========== -->
+    <section class="page" id="page-read">
+      <header class="navbar compact">
+        <button class="icon-btn" data-go="page-story"><svg class="ic"><use href="#i-left"/></svg></button>
+        <h2>跟读练习</h2>
+        <span class="read-progress" id="read-progress">1/3</span>
+      </header>
+
+      <div class="scroll">
+        <div class="read-illu" id="read-illu"></div>
+
+        <div class="sentence-card">
+          <p class="sentence" id="read-sentence">从前,有一只爱做梦的小兔子。</p>
+          <p class="pinyin" id="read-pinyin">cóng qián, yǒu yì zhī ài zuò mèng de xiǎo tù zi.</p>
+          <button class="listen-small" id="btn-read-listen"><svg class="ic"><use href="#i-volume"/></svg>听原声</button>
+        </div>
+
+        <div class="result" id="read-result">
+          <div class="stars" id="stars">
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+            <svg class="ic"><use href="#i-star"/></svg>
+          </div>
+          <p id="result-text">按住麦克风,大声读出来吧!</p>
+        </div>
+
+        <div class="wave" id="wave">
+          <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <footer class="read-bar">
+        <button class="round-btn" id="btn-read-prev"><svg class="ic"><use href="#i-left"/></svg></button>
+        <button class="mic-btn" id="btn-mic">
+          <svg class="ic"><use href="#i-mic"/></svg>
+          <small>按住跟读</small>
+        </button>
+        <button class="round-btn" id="btn-read-next"><svg class="ic"><use href="#i-right"/></svg></button>
+      </footer>
+    </section>
+
+    <!-- ========== 页面5:书架 ========== -->
+    <section class="page" id="page-library">
+      <header class="navbar compact">
+        <button class="icon-btn" data-go="page-home"><svg class="ic"><use href="#i-left"/></svg></button>
+        <h2>我的故事</h2>
+        <span></span>
+      </header>
+      <div class="scroll">
+        <div class="stats">
+          <div><svg class="ic"><use href="#i-book"/></svg><b>12</b><span>个故事</span></div>
+          <div><svg class="ic"><use href="#i-mic"/></svg><b>86</b><span>句跟读</span></div>
+          <div><svg class="ic"><use href="#i-flame"/></svg><b>7</b><span>天连续</span></div>
+        </div>
+        <div class="book-grid">
+          <div class="book" data-go="page-story"><img src="assets/story/p1.jpg" alt="" /><p>小兔子的月亮之旅</p><small>4页 · <svg class="ic"><use href="#i-star"/></svg> 3</small></div>
+          <div class="book"><div class="cover" style="--c1:#caffbf;--c2:#fdffb6"><svg class="ic"><use href="#i-image"/></svg></div><p>恐龙的玩具派对</p><small>6页 · <svg class="ic"><use href="#i-star"/></svg> 2</small></div>
+          <div class="book"><div class="cover" style="--c1:#9bf6ff;--c2:#a0c4ff"><svg class="ic"><use href="#i-image"/></svg></div><p>海底寻妈记</p><small>4页 · <svg class="ic"><use href="#i-star"/></svg> 3</small></div>
+          <div class="book"><div class="cover" style="--c1:#ffc6ff;--c2:#ffadad"><svg class="ic"><use href="#i-image"/></svg></div><p>不爱睡觉的公主</p><small>8页 · <svg class="ic"><use href="#i-star"/></svg> 1</small></div>
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </section>
+
+    <!-- ========== 页面6:我的 / 喜好 ========== -->
+    <section class="page" id="page-profile">
+      <header class="navbar compact">
+        <span style="width:36px"></span>
+        <h2>我的</h2>
+        <span style="width:36px"></span>
+      </header>
+      <div class="scroll">
+        <div class="profile-head">
+          <div class="avatar"><svg class="ic"><use href="#i-user"/></svg></div>
+          <div>
+            <b id="profile-name">小宝</b>
+            <small id="profile-sub">3-5岁 · 已创作 12 个故事</small>
+          </div>
+        </div>
+
+        <p class="section-label">故事喜好 <small>只需设置一次,之后生成都按这里来</small></p>
+        <div class="pref-card">
+          <div class="setting-row">
+            <label>孩子年龄</label>
+            <div class="segment" data-pref="age">
+              <button class="seg" data-v="2-5岁">2-5岁</button>
+              <button class="seg" data-v="6-8岁">6-8岁</button>
+              <button class="seg" data-v="9-12岁">9-12岁</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <label>故事长度</label>
+            <div class="segment" data-pref="len">
+              <button class="seg" data-v="短篇">短篇 · 4页</button>
+              <button class="seg" data-v="中篇">中篇 · 6页</button>
+              <button class="seg" data-v="长篇">长篇 · 8页</button>
+            </div>
+          </div>
+          <div class="setting-row column">
+            <label>插画风格</label>
+            <div class="style-grid" data-pref="style">
+              <button class="style-item" data-v="蜡笔童趣" style="--c1:#ffd6a5;--c2:#fdffb6"><i></i>蜡笔童趣</button>
+              <button class="style-item" data-v="水彩绘本" style="--c1:#caffbf;--c2:#9bf6ff"><i></i>水彩绘本</button>
+              <button class="style-item" data-v="3D卡通" style="--c1:#bdb2ff;--c2:#ffc6ff"><i></i>3D卡通</button>
+              <button class="style-item" data-v="剪纸风" style="--c1:#a0c4ff;--c2:#ffadad"><i></i>剪纸风</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="section-label">其他</p>
+        <div class="pref-card">
+          <button class="list-row" id="btn-replay-guide"><svg class="ic"><use href="#i-bulb"/></svg><span>重新查看使用引导</span><svg class="ic"><use href="#i-right"/></svg></button>
+          <button class="list-row"><svg class="ic"><use href="#i-volume"/></svg><span>朗读音色</span><small>温柔女声</small><svg class="ic"><use href="#i-right"/></svg></button>
+        </div>
+        <div class="spacer"></div>
+      </div>
+    </section>
+
+    <!-- ========== 首次引导(覆盖层) ========== -->
+    <section class="onboard" id="onboard" hidden>
+      <div class="ob-dots"><i class="active"></i><i></i><i></i></div>
+
+      <div class="ob-step active" data-step="0">
+        <div class="ob-art"><svg class="ic"><use href="#i-moon"/></svg></div>
+        <h2>欢迎来到童话星球</h2>
+        <p>说一句话,就能为孩子生成一本带插画、能跟读的专属故事书。</p>
+      </div>
+
+      <div class="ob-step" data-step="1">
+        <h2>先告诉我们孩子的情况</h2>
+        <p>只需设置一次,之后生成的故事都会按这里来。随时可在「我的」里修改。</p>
+        <div class="ob-form">
+          <label>孩子年龄</label>
+          <div class="segment" data-pref="age">
+            <button class="seg" data-v="2-5岁">2-5岁</button>
+            <button class="seg" data-v="6-8岁">6-8岁</button>
+            <button class="seg" data-v="9-12岁">9-12岁</button>
+          </div>
+          <label>喜欢的插画风格</label>
+          <div class="style-grid" data-pref="style">
+            <button class="style-item" data-v="蜡笔童趣" style="--c1:#ffd6a5;--c2:#fdffb6"><i></i>蜡笔童趣</button>
+            <button class="style-item" data-v="水彩绘本" style="--c1:#caffbf;--c2:#9bf6ff"><i></i>水彩绘本</button>
+            <button class="style-item" data-v="3D卡通" style="--c1:#bdb2ff;--c2:#ffc6ff"><i></i>3D卡通</button>
+            <button class="style-item" data-v="剪纸风" style="--c1:#a0c4ff;--c2:#ffadad"><i></i>剪纸风</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="ob-step" data-step="2">
+        <h2>三步玩转</h2>
+        <ul class="ob-how">
+          <li><span class="n">1</span><svg class="ic"><use href="#i-sparkles"/></svg><div><b>说想法</b><small>输入一句话或点几个关键词</small></div></li>
+          <li><span class="n">2</span><svg class="ic"><use href="#i-image"/></svg><div><b>看故事</b><small>自动配好插画,点句子就能听</small></div></li>
+          <li><span class="n">3</span><svg class="ic"><use href="#i-mic"/></svg><div><b>跟着读</b><small>按住麦克风,读完拿星星</small></div></li>
+        </ul>
+      </div>
+
+      <footer class="ob-foot">
+        <button class="ghost-btn" id="ob-skip">跳过</button>
+        <button class="primary-btn" id="ob-next"><span>下一步</span><svg class="ic"><use href="#i-right"/></svg></button>
+      </footer>
+    </section>
+
+    <!-- 底部 Tab -->
+    <nav class="tabbar" id="tabbar">
+      <button class="tab active" data-go="page-home"><svg class="ic"><use href="#i-home"/></svg>创作</button>
+      <button class="tab" data-go="page-library"><svg class="ic"><use href="#i-book"/></svg>书架</button>
+      <button class="tab" data-go="page-profile"><svg class="ic"><use href="#i-user"/></svg>我的</button>
+    </nav>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>睡前故事小程序 · 可点击原型</title>
+<style>
+  :root{
+    --bg:#FBF4E8; --bg2:#F5E9D6; --ink:#4A3B2A; --ink-soft:#8B765C;
+    --accent:#E9A15B; --accent-deep:#D2833A; --line:#E6D6BC;
+    --card:#FFFDF8; --dim:#BCA88B; --good:#7BA05B; --bad:#C96A5A;
+    --fs:18px;
+  }
+  /* 深色更暗（P4 设置里的开关，睡前暗光场景） */
+  .dark{ --bg:#2A2118; --bg2:#221B14; --ink:#EADCC4; --ink-soft:#B29E83;
+         --line:#3E3225; --card:#32281E; --dim:#6E5D47; --accent:#E0A266; }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0; padding:24px; font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+    background:#EFE3CE; color:var(--ink); font-size:var(--fs); line-height:1.6;
+    display:flex; gap:28px; align-items:flex-start; justify-content:center; flex-wrap:wrap;
+  }
+  .notes{width:330px; font-size:13px; line-height:1.75; color:#6B5B45;}
+  .notes h1{font-size:16px; margin:0 0 10px; color:#4A3B2A;}
+  .notes h2{font-size:13px; margin:18px 0 6px; color:#4A3B2A;}
+  .notes ul{margin:0; padding-left:18px;}
+  .notes li{margin:4px 0;}
+  .notes .tag{display:inline-block; background:#E9A15B22; border:1px solid #E9A15B66;
+    color:#8A5A20; border-radius:999px; padding:0 8px; font-size:11px; margin-left:6px;}
+  .notes code{background:#0000000d; padding:1px 4px; border-radius:4px; font-size:12px;}
+
+  /* ---------- 手机壳 ---------- */
+  .phone{
+    width:390px; height:844px;
+    transform:scale(var(--k,1)); transform-origin:top center;
+    margin-bottom:calc((var(--k,1) - 1) * 844px);
+    background:var(--bg); border:10px solid #3A2F22; border-radius:44px;
+    color:var(--ink);
+    box-shadow:0 24px 60px #00000030; overflow:hidden; position:relative;
+    display:flex; flex-direction:column;
+  }
+  .screen{flex:1; display:none; flex-direction:column; overflow:hidden;}
+  .screen.on{display:flex;}
+  /* 手机壳固定 844 高等比缩放；内容超高时播放页可纵向滚动，绝不压缩插图与高亮区 */
+  #s-p3.on{overflow-y:auto; scrollbar-width:none;}
+  #s-p3.on::-webkit-scrollbar{display:none;}
+  .scroll{flex:1; overflow-y:auto; padding:22px 20px 12px; -webkit-overflow-scrolling:touch;}
+  .scroll::-webkit-scrollbar{width:0}
+
+  .tabbar{
+    display:flex; border-top:1px solid var(--line); background:var(--bg2);
+    padding:8px 0 calc(8px + env(safe-area-inset-bottom, 14px));
+  }
+  .tabbar button{
+    flex:1; background:none; border:0; color:var(--dim); font-size:12px; padding:4px 0;
+    display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer;
+    font-family:inherit;
+  }
+  .tabbar button.sel{color:var(--accent-deep); font-weight:600;}
+  .dark .tabbar button.sel{color:var(--accent);}
+  .tabbar svg{width:22px; height:22px;}
+
+  h2.page{font-size:20px; margin:6px 0 2px; font-weight:600;}
+  .brand{font-size:13px; color:var(--dim); letter-spacing:.5px;}
+  .muted{color:var(--ink-soft); font-size:14px;}
+  .tiny{font-size:12px; color:var(--dim);}
+
+  /* ---------- 控件 ---------- */
+  .input{
+    width:100%; margin-top:12px; background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:14px 16px; font-size:var(--fs); color:var(--ink);
+    font-family:inherit; resize:none; height:64px; line-height:1.5;
+  }
+  .input:focus{outline:none; border-color:var(--accent);}
+  .shake{animation:shk .35s;} @keyframes shk{
+    10%,90%{transform:translateX(-2px)} 30%,70%{transform:translateX(4px)} 50%{transform:translateX(-4px)}}
+
+  .chips{display:flex; gap:8px; overflow-x:auto; padding:8px 0 6px; margin:0 -20px; padding-left:20px; padding-right:20px;}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{
+    flex:0 0 auto; background:var(--card); border:1px solid var(--line); color:var(--ink-soft);
+    border-radius:999px; padding:7px 14px; font-size:14px; cursor:pointer; white-space:nowrap;
+    font-family:inherit;
+  }
+  .chip:active{transform:scale(.96);}
+  .seg{display:flex; gap:6px;}
+  .seg button{
+    flex:1; background:var(--card); border:1px solid var(--line); color:var(--ink-soft);
+    border-radius:12px; padding:9px 4px; font-size:14px; cursor:pointer; font-family:inherit;
+  }
+  .seg button.sel{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600;}
+  .field{margin-top:16px;}
+  .field>label{display:block; font-size:13px; color:var(--dim); margin-bottom:6px;}
+  .switch{width:52px; height:30px; border-radius:999px; background:var(--line); position:relative;
+    cursor:pointer; transition:background .2s;}
+  .switch i{position:absolute; top:3px; left:3px; width:24px; height:24px; border-radius:50%;
+    background:#fff; transition:left .2s; box-shadow:0 1px 3px #0002;}
+  .switch.on{background:var(--accent);} .switch.on i{left:25px;}
+  .row{display:flex; align-items:center; justify-content:space-between; gap:12px;}
+
+  .btn{
+    width:100%; margin-top:20px; border:0; border-radius:18px; padding:17px; font-size:17px;
+    font-weight:600; background:var(--accent); color:#fff; cursor:pointer; font-family:inherit;
+    box-shadow:0 6px 18px #E9A15B55;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn[disabled]{background:var(--line); color:var(--dim); box-shadow:none; cursor:not-allowed;}
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--ink-soft);
+    box-shadow:none; font-weight:400; padding:12px; font-size:15px;}
+
+  /* ---------- 列表卡 ---------- */
+  .card{display:flex; gap:12px; align-items:center; padding:12px; border-radius:16px;
+    background:var(--card); border:1px solid var(--line); margin-top:10px; cursor:pointer;}
+  .card:active{transform:scale(.99);}
+  .thumb{width:52px; height:52px; border-radius:12px; flex:0 0 auto; overflow:hidden; background:var(--bg2);}
+  .card .t{font-size:15px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .card .s{font-size:12px; color:var(--dim); margin-top:2px;}
+  .star{margin-left:auto; color:var(--accent); flex:0 0 auto;}
+  .sec-title{margin:26px 0 2px; font-size:13px; color:var(--dim);}
+
+  /* ---------- P2 生成中 ---------- */
+  .dots{display:flex; gap:6px; align-items:center;}
+  .dots i{width:9px; height:9px; border-radius:50%; background:var(--line);}
+  .dots i.on{background:var(--accent);}
+  .stage-txt{font-size:15px; color:var(--ink-soft); margin-left:10px;}
+  .para{margin:14px 0; padding-left:14px; border-left:3px solid var(--line);
+    opacity:0; transform:translateY(6px); transition:opacity .4s, transform .4s; font-size:16px;}
+  .para.in{opacity:1; transform:none;}
+  .caret{display:inline-block; width:8px; height:18px; background:var(--accent);
+    vertical-align:-3px; animation:bl 1s steps(2) infinite;}
+  @keyframes bl{50%{opacity:0}}
+  .substat{font-size:12px; color:var(--dim); margin-top:6px;}
+
+  /* ---------- P3 播放页 ---------- */
+  .playhead{padding:16px 20px 6px;}
+  .ptitle{font-size:17px; font-weight:600;}
+  .ptitle .back{color:var(--dim); font-weight:400; cursor:pointer; margin-right:8px;}
+  .psub{font-size:12px; color:var(--dim); margin-top:2px;}
+  .aigc{font-size:11px; color:var(--dim); margin-top:5px; letter-spacing:.2px;}
+  .artwrap{margin:10px auto 0; border-radius:20px; overflow:hidden;
+    height:33%; aspect-ratio:3/4; width:auto; flex:0 0 auto;
+    background:var(--bg2); position:relative; touch-action:pan-y;}
+  .art{position:absolute; inset:0; opacity:0; transition:opacity .5s;}
+  .art.on{opacity:1;}
+  .art svg{width:100%; height:100%; display:block;}
+  .breath{animation:br 2.4s ease-in-out infinite;}
+  @keyframes br{50%{opacity:.55}}
+
+  .lines{padding:14px 22px 4px; flex:0 0 auto; min-height:106px;}
+  .line{font-size:var(--fs); color:var(--dim); margin:9px 0; cursor:pointer;
+    transition:font-size .2s, color .2s, transform .2s, opacity .2s; opacity:.75;}
+  .line.cur{font-size:24px; color:var(--accent-deep); font-weight:600; opacity:1; transform:translateY(-1px);}
+  .dark .line.cur{color:var(--accent);}
+  .lines.flip{animation:flip .32s ease;}
+  @keyframes flip{from{opacity:.25; transform:translateY(12px)} to{opacity:1; transform:none}}
+
+  .seek{height:4px; border-radius:2px; background:var(--line); margin:6px 20px 0; position:relative; cursor:pointer;}
+  .seek::before{content:""; position:absolute; left:0; right:0; top:-11px; bottom:-11px;}
+  .seek>b{display:block; height:100%; border-radius:2px; background:var(--accent); width:0;}
+  .seek>b::after{content:""; position:absolute; right:-6px; top:-4px; width:12px; height:12px;
+    border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--bg);}
+  .times{display:flex; justify-content:space-between; font-size:11px; color:var(--dim); margin:6px 20px 0;}
+
+  .controls{display:flex; align-items:center; justify-content:center; gap:18px; padding:8px 20px 4px;}
+  .ctl{background:none; border:0; color:var(--ink-soft); cursor:pointer; padding:6px; display:flex;}
+  .ctl svg{width:24px; height:24px;}
+  .ctl.main{width:64px; height:64px; border-radius:50%; background:var(--accent); color:#fff;
+    justify-content:center; box-shadow:0 8px 20px #E9A15B55;}
+  .ctl.main svg{width:30px; height:30px;}
+  .ctl.main.wait{animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{50%{transform:scale(1.06); box-shadow:0 10px 26px #E9A15B88}}
+
+  .under{display:flex; flex-direction:column; gap:10px; padding:4px 20px 10px;}
+  .quick{display:flex; gap:8px; flex-wrap:wrap;}
+  .quick .chip{font-size:13px; padding:6px 12px;}
+  .quick .chip.on{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .hint{text-align:center; font-size:13px; color:var(--ink-soft); min-height:20px;}
+  .goodnight{margin:0 20px 10px; padding:14px; border-radius:18px; background:var(--bg2);
+    border:1px solid var(--line); text-align:center; display:none;}
+  .goodnight.on{display:block;}
+  /* 播完卡片替换底部控制行，不把页面顶高 */
+  .goodnight.on ~ .under{display:none;}
+  .goodnight .g{font-size:20px; font-weight:600;}
+
+  /* ---------- P4 ---------- */
+  .profile{display:flex; align-items:center; gap:12px; padding:14px; border-radius:18px;
+    background:var(--card); border:1px solid var(--line); margin-top:14px;}
+  .avatar{width:44px; height:44px; border-radius:50%; background:var(--accent);
+    color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600;}
+  .tabs2{display:flex; gap:6px; margin:18px 0 2px;}
+  .tabs2 button{flex:1; background:var(--bg2); border:1px solid var(--line); color:var(--ink-soft);
+    border-radius:12px; padding:9px; font-size:14px; cursor:pointer; font-family:inherit;}
+  .tabs2 button.sel{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600;}
+  .listrow{display:flex; align-items:center; gap:12px; padding:12px 2px; border-bottom:1px solid var(--line);
+    font-size:15px; cursor:pointer;}
+  .listrow .v{margin-left:auto; color:var(--dim); font-size:13px; display:flex; align-items:center; gap:6px;}
+  .foot{margin-top:22px; text-align:center; font-size:12px; color:var(--dim); line-height:2;}
+  .foot u{text-decoration:none; cursor:pointer;}
+  .foot u:hover{color:var(--ink-soft);}
+  .empty{padding:40px 0; text-align:center; color:var(--dim); font-size:14px;}
+
+  /* ---------- toast ---------- */
+  .toast{position:absolute; left:50%; bottom:104px; transform:translate(-50%,12px);
+    background:#3A2F22EE; color:#F7EBD8; font-size:13px; padding:10px 18px; border-radius:12px;
+    opacity:0; pointer-events:none; transition:.25s; max-width:80%; text-align:center; z-index:40;}
+  .toast.on{opacity:1; transform:translate(-50%,0);}
+  .netbar{position:absolute; top:0; left:0; right:0; height:26px; background:#C96A5AEE; color:#fff;
+    font-size:12px; display:none; align-items:center; justify-content:center; z-index:35;}
+  .netbar.on{display:flex;}
+</style>
+</head>
+<body>
+
+<aside class="notes">
+  <h1>睡前故事 · 可点击原型</h1>
+  <p>四条链路都能走通：讲故事 → 生成中 → 播放 → 我的。<b>纯前端模拟</b>，没有真音频，逐句高亮由内置时间轴驱动。</p>
+
+  <h2>怎么试 <span class="tag">建议顺序</span></h2>
+  <ul>
+    <li>① 点一个主题 chip（会填进输入框，<b>可再改两个字</b>）</li>
+    <li>② 参数随点随生效 → 按「生成故事」</li>
+    <li>③ 生成中：段落逐段淡入、进度文案按阶段变、插图计数在跑</li>
+    <li>④ 就绪后落在播放页，<b>必须点那枚大播放键才起播</b></li>
+    <li>⑤ 起播后试：点任意句 seek、左右横滑翻段、拖进度条、切语速、切定时</li>
+    <li>⑥ 播完停在「晚安」，<b>不自动连播</b></li>
+    <li>⑦ 「我的」→ 打开<b>深色更暗</b>，睡前暗光观感在这里看</li>
+    <li>⑧ 输入「打屁股」或「鬼」试试被拦：文案不含糊，<b>次数不扣</b></li>
+  </ul>
+
+  <h2>原型里能直接看到的三处合规</h2>
+  <ul>
+    <li><b>待点起播</b>：落地不自动播（拒绝情形 3.5.2「禁止视频、音乐、语音等多媒体的自动播放」）</li>
+    <li><b>AIGC 常驻标识</b>：播放页副标题下「内容由AI生成…」，含「AI生成」四字原样，不可折叠</li>
+    <li><b>文案禁词</b>：全界面不出现「绘本 / 读物 / 听书 / 电台 / 节目 / 课程」（禁词表见 <code>docs/页面与交互.md</code>）</li>
+  </ul>
+
+  <h2>与真实实现的差异</h2>
+  <ul>
+    <li>插图是内联 SVG 占位，真实为 Seedream 生成 + 参考图角色一致性</li>
+    <li>时长/句时间戳是写死的演示数据；真实来自 TTS 字级时间戳派生（<code>docs/接口与数据.md</code> §3）</li>
+    <li>切语速在原型里只改走时；真实要后端重合成并取新的时间戳</li>
+    <li>额度、收藏、历史只在内存里，刷新即重置</li>
+  </ul>
+</aside>
+
+<div class="phone" id="phone">
+  <div class="netbar" id="netbar">网络不太好，已保留生成到一半的内容</div>
+  <div class="toast" id="toast"></div>
+
+  <!-- ============ P1 讲故事 ============ -->
+  <section class="screen on" id="s-p1">
+    <div class="scroll">
+      <div class="brand">小故事的睡前时光</div>
+      <h2 class="page">今晚想讲点什么？</h2>
+      <textarea class="input" id="inp" maxlength="40" placeholder="例：小兔子第一次自己睡觉"></textarea>
+      <div class="muted tiny" style="margin-top:8px">不知道写什么？试试：</div>
+      <div class="chips" id="chips"></div>
+
+      <div class="field"><label>时长</label>
+        <div class="seg" data-k="len">
+          <button data-v="short">短 · 3分</button>
+          <button data-v="mid" class="sel">中 · 5分</button>
+          <button data-v="long">长 · 8分</button>
+        </div>
+      </div>
+      <div class="field"><label>音色</label>
+        <div class="seg" data-k="voice">
+          <button data-v="sister" class="sel">温柔姐姐</button>
+          <button data-v="grandpa">故事爷爷</button>
+          <button data-v="peer">小伙伴</button>
+        </div>
+      </div>
+      <div class="field"><label>背景音</label>
+        <div class="seg" data-k="bgm">
+          <button data-v="off">关</button>
+          <button data-v="box">八音盒</button>
+          <button data-v="rain" class="sel">雨声</button>
+          <button data-v="noise">白噪声</button>
+        </div>
+      </div>
+      <div class="field"><label>讲给</label>
+        <div class="seg" data-k="child">
+          <button data-v="1" class="sel">乐乐</button>
+          <button data-v="2">二宝</button>
+          <button data-v="new">+ 新建</button>
+        </div>
+      </div>
+      <div class="field row"><label style="margin:0">结尾加一句道理</label>
+        <div class="switch on" id="sw-moral"><i></i></div>
+      </div>
+
+      <button class="btn" id="go" disabled>先写一句话</button>
+      <div class="tiny" id="quota" style="text-align:center;margin-top:8px">今日剩 3 次 · 不收费</div>
+
+      <div class="sec-title">最近</div>
+      <div id="recent"></div>
+
+      <div class="foot"><u>隐私政策</u> · <u>用户协议</u> · <u>内容说明（AI 生成）</u></div>
+    </div>
+    <nav class="tabbar" data-tab="p1"></nav>
+  </section>
+
+  <!-- ============ P2 生成中 ============ -->
+  <section class="screen" id="s-p2">
+    <div class="scroll">
+      <div style="margin-bottom:14px; color:var(--dim); cursor:pointer" class="backto">‹</div>
+      <h2 class="page" id="p2-title">正在给乐乐编故事</h2>
+      <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <div class="stage-txt" id="stage">听听这句话…</div>
+      <div id="stream" style="margin-top:16px"></div>
+      <div class="substat" id="substat">插图 0/4 · 声音准备中</div>
+      <button class="btn ghost" id="cancel">取消</button>
+    </div>
+  </section>
+
+  <!-- ============ P3 播放 ============ -->
+  <section class="screen" id="s-p3">
+    <div class="playhead">
+      <div class="ptitle"><span class="back" id="p3-back">‹</span><span id="p3-title">小兔子第一次自己睡觉</span></div>
+      <div class="psub" id="p3-sub">给乐乐的第 5 个故事 · 约 5 分钟</div>
+      <div class="aigc">内容由AI生成 · 故事与插图均为人工智能生成</div>
+    </div>
+    <div class="artwrap" id="artwrap"></div>
+    <div class="lines" id="lines"></div>
+    <div class="seek" id="seek"><b></b></div>
+    <div class="times"><span id="t-cur">0:00</span><span id="t-seg">段 1/4</span><span id="t-all">0:32</span></div>
+    <div class="controls">
+      <button class="ctl" id="c-prev" aria-label="上一段"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14l-11-7z"/></svg></button>
+      <button class="ctl main wait" id="c-play" aria-label="播放"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="ctl" id="c-next" aria-label="下一段"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>
+    </div>
+    <div class="hint" id="hint">点一下，就开始念给乐乐听</div>
+    <div class="goodnight" id="gn">
+      <div class="g">晚安，乐乐</div>
+      <div class="muted" style="margin-top:4px">今天到这里，明天再讲一个新的</div>
+      <div style="display:flex; gap:10px; margin-top:14px">
+        <button class="btn ghost" id="gn-again" style="margin:0">再来一个</button>
+        <button class="btn" id="gn-fav" style="margin:0">收藏</button>
+      </div>
+    </div>
+    <div class="under">
+      <div class="quick" id="speed">
+        <button class="chip" data-r="0.8">0.8x</button>
+        <button class="chip on" data-r="1">1.0x</button>
+        <button class="chip" data-r="1.2">1.2x</button>
+      </div>
+      <div class="quick" id="timer">
+        <button class="chip on" data-t="end">播完停止</button>
+        <button class="chip" data-t="15">15 分钟（需亮屏）</button>
+        <button class="chip" data-t="30">30 分钟（需亮屏）</button>
+      </div>
+      <div class="quick">
+        <button class="chip" id="fav">收藏</button>
+        <button class="chip" id="again">再来一个</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ P4 我的 ============ -->
+  <section class="screen" id="s-p4">
+    <div class="scroll">
+      <h2 class="page">我的</h2>
+      <div class="profile">
+        <div class="avatar" id="pf-a">乐</div>
+        <div><div style="font-size:16px;font-weight:600" id="pf-n">乐乐 · 5岁</div>
+          <div class="tiny" id="pf-c">已讲 12 个故事</div></div>
+        <div class="tiny" style="margin-left:auto; cursor:pointer">编辑</div>
+      </div>
+
+      <div class="sec-title">乐乐的故事 · 共 <span id="cnt">12</span> 篇</div>
+      <div class="tabs2" id="mytabs">
+        <button class="sel" data-l="fav">收藏</button>
+        <button data-l="hist">听过</button>
+      </div>
+      <div id="mylist"></div>
+
+      <div class="sec-title">额度</div>
+      <div class="row" style="padding:4px 0"><span class="muted">今日已用</span>
+        <span><b id="used">0</b> / 3 次</span></div>
+
+      <div class="sec-title">设置</div>
+      <div class="listrow">默认音色 <span class="v">温柔姐姐 ›</span></div>
+      <div class="listrow">背景音 <span class="v">雨声 ›</span></div>
+      <div class="listrow" id="darkrow">深色更暗 <span class="v"><span class="switch" id="sw-dark"><i></i></span></span></div>
+
+      <div class="foot">
+        <u>隐私政策</u> · <u>用户协议</u> · <u>意见反馈</u><br>
+        关于 · 内容说明（故事与插图由 AI 生成）
+      </div>
+    </div>
+    <nav class="tabbar" data-tab="p4"></nav>
+  </section>
+</div>
+
+<script>
+/* ================= 演示数据 ================= */
+/* 每篇：4 段，每段 2 句；a/b 为句子的起止毫秒（真实实现里来自 TTS 字级时间戳派生） */
+const STORIES = {
+  rabbit: {
+    id:'rabbit', title:'小兔子第一次自己睡觉', minutes:5, no:5,
+    segs:[
+      [{t:'兔子的房间今晚特别安静。',a:0,b:3000},{t:'月亮把光轻轻放在地板上。',a:3000,b:6600}],
+      [{t:'它抱紧小毯子，数到十。',a:6600,b:10200},{t:'可是怎么数，也数不到睡着。',a:10200,b:14400}],
+      [{t:'一，二，一，二……耳朵数不完。',a:14400,b:18600},{t:'窗外的雨，也跟着一起数。',a:18600,b:22800}],
+      [{t:'兔子听见雨声，慢慢闭上眼睛。',a:22800,b:27000},{t:'晚安，第一次自己睡觉的小兔子。',a:27000,b:32000}],
+    ]
+  },
+  elephant: {
+    id:'elephant', title:'怕打雷的小象', minutes:3, no:12,
+    segs:[
+      [{t:'天空轰隆一声，小象躲进了桌子底下。',a:0,b:4200},{t:'它的长鼻子把自己卷成一个小球。',a:4200,b:8200}],
+      [{t:'雨点敲窗户，像在敲门问：在吗？',a:8200,b:12600},{t:'小象小声说：在，可是我有点怕。',a:12600,b:17000}],
+      [{t:'象妈妈把耳朵盖住它的眼睛。',a:17000,b:21200},{t:'雷声很远，拥抱很近。',a:21200,b:25000}],
+      [{t:'小象数着雨点，数着数着就困了。',a:25000,b:29400},{t:'天亮以后，云会散开的。',a:29400,b:33200}],
+    ]
+  },
+  moon: {
+    id:'moon', title:'月亮去哪了', minutes:8, no:11,
+    segs:[
+      [{t:'今晚上床的时候，窗外没有月亮。',a:0,b:3800},{t:'乐乐掀开被子，想找它。',a:3800,b:7200}],
+      [{t:'它可能在云朵后面躲雨。',a:7200,b:11000},{t:'也可能去了更远的山后面值班。',a:11000,b:15200}],
+      [{t:'乐乐把台灯关了，让眼睛适应黑。',a:15200,b:19600},{t:'忽然，窗帘缝里有一条细细的银边。',a:19600,b:24400}],
+      [{t:'原来月亮绕了一大圈，回来啦。',a:24400,b:28600},{t:'它也听到了乐乐说的晚安。',a:28600,b:32400}],
+    ]
+  },
+  school: {
+    id:'school', title:'乐乐的第一天上幼儿园', minutes:8, no:10,
+    segs:[
+      [{t:'门口的红色小书包，比昨天重一点。',a:0,b:4200},{t:'乐乐握着妈妈的手指，握得很紧。',a:4200,b:8800}],
+      [{t:'教室里有积木，也有一个会吹泡泡的老师。',a:8800,b:14000},{t:'泡泡飘到鼻尖上，乐乐笑了半秒。',a:14000,b:18600}],
+      [{t:'午饭时，勺子叮当作响，像小雨。',a:18600,b:23200},{t:'同桌分给它半块南瓜。',a:23200,b:27000}],
+      [{t:'放学时，妈妈的手指终于松开了。',a:27000,b:31400},{t:'原来第一天，是可以笑两次的。',a:31400,b:36000}],
+    ]
+  }
+};
+const LIB = ['rabbit','elephant','moon','school'];
+const CHIPS = ['怕打雷','分床睡','第一天上学','被抢玩具','牙齿掉了','交朋友','不想刷牙','影子跟着我'];
+
+/* ================= 状态 ================= */
+const S = {
+  story:STORIES.rabbit, quota:3, used:0,
+  params:{len:'mid', voice:'sister', bgm:'rain', child:'1', moral:true}, lastRaw:'',
+  cur:0, playing:false, rate:1, wait:true, ended:false,
+  fav:{rabbit:false, elephant:true, moon:false, school:false},
+  heard:['rabbit','elephant','moon'],
+  timer:'end', timerLeft:0, listTab:'fav',
+  arts:null
+};
+
+/* ================= 工具 ================= */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=t=>t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const fmt=ms=>{const s=Math.floor(ms/1000); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+let toastT;
+function toast(m){const t=$('#toast'); t.textContent=m; t.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),1900);}
+function show(id){ $$('.screen').forEach(x=>x.classList.remove('on')); $('#'+id).classList.add('on');
+  tabMark(id); }
+function tabMark(id){ $$('.tabbar').forEach(n=>[...n.children].forEach(b=>
+  b.classList.toggle('sel', b.dataset.g===id.slice(2)))); }
+
+/* ================= Tab 栏 ================= */
+const ICON={
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h7v15H4zM13 5h7v15h-7z"/></svg>',
+  me:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>'
+};
+$$('.tabbar').forEach(n=>{
+  n.innerHTML=`<button data-g="p1">${ICON.book}<span>讲故事</span></button>
+               <button data-g="p4">${ICON.me}<span>我的</span></button>`;
+  n.onclick=e=>{const b=e.target.closest('button'); if(!b)return;
+    if(b.dataset.g==='p1'){ renderP1(); show('s-p1'); } else { renderP4(); show('s-p4'); }};
+});
+
+/* ================= 插图（内联 SVG 占位） ================= */
+function art(i,key){
+  const pal=[['#F3D9B5','#E9A15B'],['#EBDCC4','#C9B37E'],['#E7D8E0','#B58FA6'],['#D9E6DC','#7FA08A'],['#F1DCCB','#D2833A']];
+  const [c1,c2]=pal[i%pal.length];
+  const scenes=[
+    /* 0 房间+月亮 */`<circle cx="72" cy="42" r="15" fill="#FFF6E0"/><ellipse cx="88" cy="36" rx="12" ry="12" fill="${c1}"/>
+      <rect x="18" y="96" width="104" height="42" rx="8" fill="${c2}" opacity=".8"/>
+      <rect x="30" y="84" width="34" height="16" rx="6" fill="#FFFDF8" opacity=".8"/>`,
+    /* 1 毯子+星星 */`<path d="M16 118c24-26 60-26 108-4" stroke="${c2}" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <path d="M52 40l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#FFF6E0"/>
+      <path d="M96 26l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#FFF6E0" opacity=".8"/>`,
+    /* 2 数耳朵 */`<ellipse cx="60" cy="76" rx="26" ry="30" fill="${c2}" opacity=".85"/>
+      <path d="M48 52c-6-20 2-30 8-30s6 14 4 26" fill="${c1}"/>
+      <path d="M72 52c6-20-2-30-8-30s-6 14-4 26" fill="${c1}"/>
+      <circle cx="53" cy="74" r="3" fill="#4A3B2A"/><circle cx="68" cy="74" r="3" fill="#4A3B2A"/>
+      <text x="98" y="70" font-size="16" fill="${c2}" font-family="serif">1 2 1 2</text>`,
+    /* 3 雨窗 */`<rect x="24" y="24" width="112" height="104" rx="10" fill="none" stroke="${c2}" stroke-width="6"/>
+      <path d="M80 24v104M24 76h112" stroke="${c2}" stroke-width="6"/>
+      ${[40,58,96,114].map(x=>`<path d="M${x} ${x>80?96:46}q-5 9 0 14" stroke="#9FB8C9" stroke-width="3" fill="none"/>`).join('')}`,
+    /* 4 晚安 */`<path d="M92 34a20 20 0 100 40 24 24 0 010-40z" fill="#FFF6E0"/>
+      <ellipse cx="60" cy="110" rx="34" ry="16" fill="${c2}" opacity=".85"/>
+      <circle cx="52" cy="106" r="3" fill="#4A3B2A"/><circle cx="68" cy="106" r="3" fill="#4A3B2A"/>`,
+  ];
+  return `<svg viewBox="0 0 160 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+    style="background:linear-gradient(160deg,${c1},var(--bg2))">${scenes[i%scenes.length]}</svg>`;
+}
+
+/* ================= P1 ================= */
+function renderP1(){
+  $('#chips').innerHTML = CHIPS.map(c=>`<button class="chip">${c}</button>`).join('');
+  $('#chips').onclick = e=>{const b=e.target.closest('.chip'); if(!b)return;
+    const i=$('#inp'); i.value=b.textContent; i.focus();
+    i.setSelectionRange(i.value.length,i.value.length); validate(); };
+  $('#recent').innerHTML = LIB.slice(0,3).map(k=>{const s=STORIES[k];
+    return `<div class="card" data-k="${k}">
+      <div class="thumb">${art(k==='rabbit'?0:k==='elephant'?3:4)}</div>
+      <div style="min-width:0"><div class="t">${s.title}</div>
+        <div class="s">给乐乐的第 ${s.no} 个 · 约 ${s.minutes} 分钟</div></div>
+      ${S.fav[k]?'<span class="star">★</span>':''}</div>`;}).join('');
+  $('#recent').onclick=e=>{const c=e.target.closest('.card'); if(c) openLib(c.dataset.k);};
+  $$('.seg').forEach(g=>g.onclick=e=>{const b=e.target.closest('button'); if(!b)return;
+    if(b.dataset.v==='new'){ toast('新建小名：原型里先占位'); return; }
+    [...g.children].forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+    S.params[g.dataset.k]=b.dataset.v; });
+  $('#inp').oninput=validate;
+  $('#sw-moral').onclick=e=>{const w=e.currentTarget; w.classList.toggle('on');
+    S.params.moral=w.classList.contains('on');};
+  $('#go').onclick=start;
+  validate(); renderQuota();
+}
+function validate(){
+  const v=$('#inp').value.trim();
+  const btn=$('#go'); btn.disabled=v.length<1||S.quota<=0;
+  btn.textContent = S.quota<=0 ? '今日次数用完了，明天再来' : (v.length<1 ? '先写一句话' : `生成故事 · 今日剩 ${S.quota} 次`);
+}
+function renderQuota(){ $('#quota').textContent=`今日剩 ${S.quota} 次 · 不收费`;
+  $('#used').textContent=S.used; validate(); }
+
+/* ================= P2 生成 ================= */
+const BLOCK=['鬼','死','杀','打屁股'];
+let gen={alive:false};
+function start(){
+  const raw=$('#inp').value.trim();
+  if(raw.length<2){ $('#inp').classList.add('shake'); setTimeout(()=>$('#inp').classList.remove('shake'),400);
+    toast('再多写一点点？'); return; }
+  if(raw.length>=40) toast('最多 40 个字，先讲到这里');
+  /* 输入审核（真实为 msgSecCheck 同步返回；被拦时额度不扣） */
+  const hit=BLOCK.find(w=>raw.includes(w));
+  if(hit){ toast('这句话我们讲不了，换一个试试'); return; }
+
+  S.quota--; S.used++; renderQuota();
+  S.lastRaw=raw; show('s-p2'); runGen(raw);
+}
+function stageSet(i,txt){ $('#dots').children[i]?.classList.add('on'); $('#stage').textContent=txt; }
+function runGen(raw,notId){
+  gen={alive:true};
+  const story=pick(raw,notId); if(notId) story.no=S.story.no+1;
+  $('#p2-title').textContent=`正在给${childName()}编故事`;
+  $('#stream').innerHTML=''; $('#substat').textContent='插图 0/'+story.segs.length+' · 声音准备中';
+  $('#dots').innerHTML='<i></i><i></i><i></i><i></i><i></i>';
+
+  stageSet(0,'听听这句话…');
+  after(700,()=>{ if(!gen.alive)return;
+    stageSet(1,'在想故事…');
+    after(900,()=>{ if(!gen.alive)return;
+      stageSet(1,'写下来啦，一段一段给你看');
+      streamParas(story,0);
+    });
+  });
+
+  function streamParas(story,si){
+    if(!gen.alive) return;
+    if(si===0){ stageSet(2,'正在画插图'); }
+    if(si>=story.segs.length){
+      stageSet(3,'请来'+voiceName()+'念给你听');
+      after(1400,()=>{ if(!gen.alive)return;
+        stageSet(4,'可以开始啦'); $('#substat').textContent='插图已就位 · 声音就绪';
+        after(600,()=>{ if(!gen.alive)return; openStory(story,true); });
+      });
+      return;
+    }
+    const seg=story.segs[si];
+    const box=document.createElement('div'); box.className='para';
+    box.innerHTML=esc(seg.map(x=>x.t).join(''))+'<span class="caret"></span>';
+    $('#stream').appendChild(box);
+    requestAnimationFrame(()=>box.classList.add('in'));
+    $('#substat').textContent=`插图 ${Math.min(si+1,story.segs.length)}/${story.segs.length} · 声音准备中`;
+    const box2=box;
+    after(820,()=>{ box2.querySelector('.caret')?.remove(); streamParas(story,si+1); });
+  }
+}
+function after(ms,fn){ const t=setTimeout(fn,ms); gen.timer=t; return t; }
+function pick(raw,notId){
+  const k = raw.includes('雷') ? 'elephant'
+          : raw.includes('月亮') ? 'moon'
+          : (raw.includes('幼儿园')||raw.includes('上学')) ? 'school' : 'rabbit';
+  /* 「再来一个」必须与上一篇不同（真实实现靠 Prompt 约束，这里换一篇演示故事） */
+  return clone(STORIES[notId && k===notId ? LIB.find(x=>x!==k) : k]);
+}
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+$('#cancel').onclick=()=>{ gen.alive=false; clearTimeout(gen.timer);
+  S.quota++; S.used--; renderQuota(); show('s-p1'); toast('已取消 · 本次次数退回'); };
+$('.backto').onclick=()=>{ gen.alive=false; clearTimeout(gen.timer); show('s-p1'); };
+
+/* ================= P3 播放 ================= */
+let raf=null, last=0, timerTick=null;
+function childName(){ return ({'1':'乐乐','2':'二宝'})[S.params.child]||'乐乐'; }
+function voiceName(){ return ({sister:'温柔姐姐',grandpa:'故事爷爷',peer:'小伙伴'})[S.params.voice]; }
+function bgmName(){ const b=S.params.bgm; return b==='off'?'无背景音':({box:'八音盒',rain:'雨声',noise:'白噪声'})[b]; }
+function total(){ return S.story.segs.at(-1).at(-1).b; }
+function flat(){ return S.story.segs.flat(); }
+function openLib(k){ openStory(clone(STORIES[k]),false); }
+function openStory(story,fromGen){
+  S.story=story; S.cur=0; S.playing=false; S.wait=true; S.ended=false; S.rate=1;
+  $('#p3-title').textContent=story.title;
+  $('#p3-sub').textContent=`给${childName()}的第 ${story.no} 个故事 · 约 ${story.minutes} 分钟`;
+  $('#t-all').textContent=fmt(total());
+  $('#artwrap').innerHTML=story.segs.map((_,i)=>`<div class="art">${art(i)}</div>`).join('');
+  S.arts=[...$('#artwrap').children];
+  $('#gn').classList.remove('on');
+  $('#fav').classList.toggle('on', !!S.fav[story.id]);
+  $('#fav').textContent=S.fav[story.id]?'已收藏':'收藏';
+  markPlay(); setSpeedUI(); setTimerUI();
+  paint(true);
+  show('s-p3');
+  if(fromGen) toast('好了，点播放键开始');
+}
+function markPlay(){
+  const p=$('#c-play');
+  p.classList.toggle('wait', S.wait);
+  p.innerHTML = (!S.playing)
+    ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM14 5h4v14h-4z"/></svg>';
+  $('#hint').textContent = S.wait ? `点一下，就开始念给${childName()}听`
+    : S.ended ? '已经讲完啦，明晚再讲'
+    : S.playing ? `${voiceName()} · ${bgmName()}`
+    : '已暂停，随时继续';
+}
+function segOf(cur){ const f=flat(); let i=0; f.forEach((x,k)=>{ if(cur>=x.a) i=k; });
+  /* 找到该句所属段 */ let acc=0; for(let s=0;s<S.story.segs.length;s++){ acc+=S.story.segs[s].length; if(i<acc) return s; } return 0; }
+let shownSeg=-1;
+function paint(force){
+  const f=flat();
+  let ci=0; f.forEach((x,k)=>{ if(S.cur>=x.a) ci=k; });
+  if(S.cur>=total()){ ci=f.length-1; }
+  const si=segOf(S.cur);
+  $('#lines').innerHTML=S.story.segs[si].map(x=>
+    `<div class="line${x===f[ci]?' cur':''}" data-a="${x.a}">${esc(x.t)}</div>`).join('');
+  if(force||si!==shownSeg){
+    S.arts.forEach((a,k)=>a.classList.toggle('on',k===si));
+    if(!force){ $('#lines').classList.remove('flip'); void $('#lines').offsetWidth; $('#lines').classList.add('flip'); }
+    shownSeg=si;
+  }
+  $('#t-seg').textContent=`段 ${si+1}/${S.story.segs.length}`;
+  $('#t-cur').textContent=fmt(S.cur);
+  $('#seek>b').style.width=(S.cur/total()*100)+'%';
+  $('#lines').onclick=e=>{const l=e.target.closest('.line'); if(!l)return;
+    S.cur=+l.dataset.a; paint(); if(!S.playing){ S.wait=false; S.playing=true; tick(); markPlay(); }
+    /* 由真实点击触发，符合 3.5.2 */ };
+}
+function tick(){
+  cancelAnimationFrame(raf);
+  let prev=performance.now();
+  const loop=now=>{
+    if(!S.playing) return;
+    S.cur=Math.min(total(), S.cur+(now-prev)*S.rate); prev=now;
+    paint();
+    if(S.cur>=total()){ finish(); return; }
+    raf=requestAnimationFrame(loop);
+  };
+  raf=requestAnimationFrame(loop);
+}
+function finish(){
+  S.playing=false; S.ended=true; S.wait=false; cancelAnimationFrame(raf); markPlay(); paint();
+  $('#gn').classList.add('on'); $('#gn .g').textContent=`晚安，${childName()}`;
+  clearInterval(timerTick);
+  /* 播完即停：不自动连播、不推荐下一篇 */
+}
+/* 播放键：唯一的起播入口 */
+$('#c-play').onclick=()=>{
+  if(S.cur>=total()){ S.cur=0; S.ended=false; $('#gn').classList.remove('on'); }
+  S.wait=false;
+  if(!S.playing){ S.playing=true; markPlay(); tick(); startTimerIfOn(); }
+  else { S.playing=false; cancelAnimationFrame(raf); stopTimer(); markPlay(); }
+};
+$('#c-prev').onclick=()=>jumpSeg(-1);
+$('#c-next').onclick=()=>jumpSeg(1);
+function jumpSeg(d){
+  let si=segOf(S.cur)+d; if(si<0)si=0; if(si>=S.story.segs.length)si=S.story.segs.length-1;
+  S.cur=S.story.segs[si][0].a; S.ended=false; $('#gn').classList.remove('on');
+  paint(); if(!S.playing) markPlay();
+}
+/* 横滑翻段 */
+let dx0=null;
+$('#artwrap').addEventListener('pointerdown',e=>dx0=e.clientX);
+$('#artwrap').addEventListener('pointerup',e=>{ if(dx0===null)return;
+  const d=e.clientX-dx0; dx0=null; if(Math.abs(d)>36) jumpSeg(d<0?1:-1); });
+/* 进度条拖动 seek */
+const seekPct=e=>{const r=$('#seek').getBoundingClientRect();
+  return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));};
+$('#seek').onclick=e=>{ S.cur=seekPct(e)*total(); S.ended=false; $('#gn').classList.remove('on'); paint(); };
+$('#p3-back').onclick=()=>{ S.playing=false; stopTimer(); renderP1(); show('s-p1'); };
+
+/* 语速：真实实现需后端重合成，这里只改走时 */
+$('#speed').onclick=e=>{const b=e.target.closest('.chip'); if(!b)return;
+  S.rate=+b.dataset.r; setSpeedUI();
+  if(S.playing) toast('正在调整声音…'); };
+function setSpeedUI(){ [...$('#speed').children].forEach(c=>c.classList.toggle('on',+c.dataset.r===S.rate)); }
+
+/* 定时：15/30 需亮屏（官方限制：后台不能用 API 操纵播放状态） */
+$('#timer').onclick=e=>{const b=e.target.closest('.chip'); if(!b)return;
+  S.timer=b.dataset.t; setTimerUI();
+  if(S.timer==='end'){ stopTimer(); toast('将播完即停'); }
+  else { S.timerLeft=+S.timer*60; if(S.playing) startTimerIfOn();
+    toast(`${S.timer} 分钟后停止 · 需保持亮屏`); } };
+function setTimerUI(){ [...$('#timer').children].forEach(c=>
+  c.classList.toggle('on', c.dataset.t===S.timer)); }
+function startTimerIfOn(){ stopTimer();
+  if(S.timer==='end'||!S.playing) return;
+  timerTick=setInterval(()=>{ S.timerLeft--;
+    if(S.timerLeft<=0){ S.playing=false; cancelAnimationFrame(raf); markPlay();
+      stopTimer(); toast('定时结束，已停止'); } },1000); }
+function stopTimer(){ clearInterval(timerTick); }
+
+/* 收藏 / 再来一个 */
+function toggleFav(){ S.fav[S.story.id]=!S.fav[S.story.id];
+  $('#fav').classList.toggle('on',S.fav[S.story.id]);
+  $('#fav').textContent=S.fav[S.story.id]?'已收藏':'收藏';
+  toast(S.fav[S.story.id]?'已收藏，不会被清理':'已取消收藏'); renderP1(); }
+$('#fav').onclick=toggleFav; $('#gn-fav').onclick=toggleFav;
+/* 「再来一个」= 沿用同一输入与参数，走同一条生成管道，内容必须与上一篇不同 */
+$('#again').onclick=$('#gn-again').onclick=()=>{
+  if(S.quota<=0){ toast('今日次数用完了，明天再来'); return; }
+  S.quota--; S.used++; renderQuota(); show('s-p2');
+  runGen(S.lastRaw || $('#inp').value.trim() || S.story.title, S.story.id);
+};
+
+/* ================= P4 ================= */
+function renderP4(){
+  $('#pf-a').textContent=childName().slice(0,1);
+  $('#pf-n').textContent=childName()+' · '+(S.params.child==='2'?'3岁':'5岁');
+  const list=S.listTab==='fav'
+    ? LIB.filter(k=>S.fav[k]).map(k=>STORIES[k])
+    : S.heard.map(k=>STORIES[k]);
+  $('#mylist').innerHTML = list.length ? list.map((s,i)=>
+    `<div class="card" data-k="${s.id}"><div class="thumb">${art(i%5)}</div>
+      <div style="min-width:0"><div class="t">第 ${s.no} 篇 ${s.title}</div>
+      <div class="s">约 ${s.minutes} 分钟 · ${S.fav[s.id]?'已收藏':'收藏后可回听'}</div></div>
+      ${S.fav[s.id]?'<span class="star">★</span>':''}</div>`).join('')
+    : `<div class="empty" id="empty-go">还没有故事，去讲第一句吧 ›</div>`;
+  $('#mylist').onclick=e=>{const c=e.target.closest('.card'); if(c){ openLib(c.dataset.k); return; }
+    if(e.target.closest('#empty-go')){ renderP1(); show('s-p1'); } };
+  $('#mytabs').onclick=e=>{const b=e.target.closest('button'); if(!b)return;
+    [...$('#mytabs').children].forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
+    S.listTab=b.dataset.l; renderP4(); };
+  renderQuota();
+}
+$('#darkrow').onclick=()=>{ const on=$('#phone').classList.toggle('dark');
+  $('#sw-dark').classList.toggle('on',on); };
+
+/* ================= 全局：弱网演示 ================= */
+window.addEventListener('error',()=>{ $('#netbar').classList.add('on'); });
+$('#phone').addEventListener('dblclick',()=>{ const n=$('#netbar');
+  n.classList.toggle('on'); if(n.classList.contains('on')) setTimeout(()=>n.classList.remove('on'),2600); });
+
+/* ================= 启动 ================= */
+/* 窗口矮于 844 时等比缩小整机，而不是把版面压扁 */
+function fitPhone(){ const k=Math.min(1,(innerHeight-48)/844);
+  $('#phone').style.setProperty('--k',k.toFixed(3)); }
+addEventListener('resize',fitPhone); fitPhone();
+
+renderP1(); renderP4(); show('s-p1');
+</script>
+</body>
+</html>

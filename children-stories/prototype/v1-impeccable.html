@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>睡前故事 · 变体 A · impeccable</title>
+<!-- 设计来源：github.com/pbakaus/impeccable（craft-floor.md）
+     落地的规则：暗色取自使用场景（睡前暗光）而非品类习惯；OKLCH 声明颜色；
+     发丝线优先于阴影（elevation 只声明一次）；圆角 12-16px；不用玻璃/渐变/emoji 图标；
+     图标为同一笔画粗细的自绘 SVG；对比度 ≥4.5:1；次级文字从主色相调色而非灰；
+     浏览器表面（选区/光标/滚动条/焦点环）一并主题化；只有一个 authored 动效。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ground:oklch(0.235 0.018 262);
+  --surface:oklch(0.272 0.018 262);
+  --ink:oklch(0.94 0.014 95);
+  --ink-2:oklch(0.80 0.022 95);
+  --ink-3:oklch(0.66 0.024 95);
+  --line:oklch(0.94 0.014 95 / 0.16);
+  --accent:oklch(0.815 0.125 75);
+  --accent-ink:oklch(0.24 0.03 70);
+  --r:14px;
+  --fs:16px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{
+  background:oklch(0.19 0.015 262); color:var(--ink);
+  font:400 var(--fs)/1.6 "Bricolage Grotesque","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  display:flex; gap:32px; justify-content:center; align-items:flex-start; padding:24px; flex-wrap:wrap;
+}
+::selection{background:var(--accent); color:var(--accent-ink)}
+input,textarea{caret-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:4px}
+*{scrollbar-width:thin; scrollbar-color:var(--line) transparent}
+::-webkit-scrollbar{width:6px} ::webkit-scrollbar-thumb{background:var(--line); border-radius:3px}
+
+.notes{width:300px; font-size:13px; line-height:1.7; color:var(--ink-3); max-width:40vw}
+.notes h1{font-size:15px; font-weight:600; color:var(--ink); margin:0 0 8px; letter-spacing:-0.01em}
+.notes b{color:var(--ink-2); font-weight:500}
+.notes ul{margin:6px 0; padding-left:16px}
+.notes li{margin:3px 0}
+
+.phone{
+  width:390px; height:844px; background:var(--ground); color:var(--ink);
+  border:1px solid var(--line); border-radius:16px; overflow:hidden; position:relative;
+  display:flex; flex-direction:column;
+  transform:scale(var(--k,1)); transform-origin:top center; margin-bottom:calc((var(--k,1) - 1) * 844px);
+}
+.screen{flex:1; display:none; flex-direction:column; overflow:hidden; min-height:0}
+.screen.on{display:flex}
+.scroll{flex:1; overflow-y:auto; padding:28px 24px 20px; scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+
+h1{font-size:30px; line-height:1.15; font-weight:600; letter-spacing:-0.025em; margin:0}
+h2{font-size:13px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--ink-3); margin:34px 0 10px}
+.sub{color:var(--ink-2); font-size:15px; margin:10px 0 30px; max-width:26ch}
+
+.field{display:block}
+.field input{
+  width:100%; min-width:0; background:none; border:0; border-bottom:1px solid var(--line);
+  color:var(--ink); font:inherit; font-size:19px; padding:10px 2px 12px; border-radius:0;
+}
+.field input::placeholder{color:var(--ink-3)}
+.field input:focus{outline:none; border-bottom-color:var(--accent)}
+
+.chips{display:flex; gap:8px; flex-wrap:wrap; margin:18px 0 6px}
+.chip{
+  border:1px solid var(--line); background:none; color:var(--ink-2); cursor:pointer;
+  font:inherit; font-size:13px; padding:6px 12px; border-radius:999px;
+}
+.chip:hover{color:var(--ink); border-color:var(--ink-3)}
+
+.rowline{display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:14px 0; border-top:1px solid var(--line); margin-top:16px}
+.rowline>span{font-size:13px; color:var(--ink-3); letter-spacing:0.04em}
+.seg{display:flex; gap:6px}
+.seg button{
+  border:1px solid var(--line); background:none; color:var(--ink-2); cursor:pointer;
+  font:inherit; font-size:13px; padding:6px 12px; border-radius:999px;
+}
+.seg button.sel{background:var(--surface); color:var(--ink); border-color:var(--ink-3)}
+
+.primary{
+  width:100%; margin-top:26px; border:0; border-radius:var(--r); cursor:pointer;
+  background:var(--accent); color:var(--accent-ink); font:inherit; font-size:17px; font-weight:600;
+  padding:15px 0; letter-spacing:-0.01em;
+}
+.primary:disabled{background:var(--surface); color:var(--ink-3); cursor:not-allowed}
+.quota{font-size:12px; color:var(--ink-3); text-align:center; margin:10px 0 0}
+
+.card{display:flex; align-items:center; gap:14px; padding:14px 0; border-top:1px solid var(--line); cursor:pointer}
+.card .t{font-size:16px; font-weight:500; letter-spacing:-0.01em}
+.card .s{font-size:12px; color:var(--ink-3); margin-top:2px}
+.card svg{width:44px; height:58px; border-radius:6px; flex:none}
+
+/* ---- P2 ---- */
+.p2head{padding:26px 24px 0}
+.dots{display:flex; gap:6px; margin:18px 0 10px}
+.dots i{width:6px; height:6px; border-radius:50%; background:var(--line)}
+.dots i.on{background:var(--accent)}
+.stage{font-size:15px; color:var(--ink-2)}
+.para{font-size:16px; color:var(--ink-2); margin:14px 0; opacity:0; transform:translateY(8px);
+  transition:opacity .45s cubic-bezier(.16,1,.3,1), transform .45s cubic-bezier(.16,1,.3,1)}
+.para.in{opacity:1; transform:none}
+.ghost{border:1px solid var(--line); background:none; color:var(--ink-2); border-radius:var(--r);
+  font:inherit; font-size:14px; padding:10px 0; width:100%; margin:20px 0; cursor:pointer}
+
+/* ---- P3 ---- */
+.phead{display:flex; align-items:baseline; gap:10px; padding:22px 24px 0}
+.back{background:none; border:0; color:var(--ink-2); font:inherit; font-size:18px; cursor:pointer; padding:0 4px 0 0}
+.ptitle{font-size:19px; font-weight:600; letter-spacing:-0.02em}
+.aigc{font-size:11px; color:var(--ink-3); padding:6px 24px 0}
+.art{margin:16px 24px 0; border-radius:var(--r); overflow:hidden; border:1px solid var(--line);
+  height:34%; flex:none; position:relative; background:var(--surface)}
+.art svg{position:absolute; inset:0; width:100%; height:100%; display:block; opacity:0; transition:opacity .5s}
+.art svg.on{opacity:1}
+.lines{padding:18px 24px 6px; flex:none; min-height:118px}
+.line{font-size:var(--fs); color:var(--ink-3); margin:10px 0; cursor:pointer;
+  transition:color .2s, font-size .2s, font-weight .2s}
+.line.cur{color:var(--ink); font-size:22px; font-weight:600; letter-spacing:-0.02em}
+.seek{height:2px; background:var(--line); margin:8px 24px 0; position:relative; cursor:pointer}
+.seek::before{content:""; position:absolute; inset:-12px 0}
+.seek b{position:absolute; left:0; top:0; bottom:0; background:var(--accent); width:0}
+.times{display:flex; justify-content:space-between; font-size:11px; color:var(--ink-3); margin:8px 24px 0;
+  font-variant-numeric:tabular-nums}
+.controls{display:flex; align-items:center; justify-content:center; gap:26px; padding:14px 0 4px}
+.ctl{background:none; border:0; color:var(--ink-2); cursor:pointer; padding:6px}
+.ctl svg{width:22px; height:22px; display:block}
+.ctl.main{width:58px; height:58px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+  display:flex; align-items:center; justify-content:center}
+.ctl.main svg{width:24px; height:24px}
+.ctl.main.wait{animation:rise .9s cubic-bezier(.16,1,.3,1)}
+@keyframes rise{from{transform:translateY(14px); opacity:.4}}
+.hint{text-align:center; font-size:13px; color:var(--ink-3); margin:6px 0 0; min-height:20px}
+.p3foot{display:flex; justify-content:center; gap:26px; padding:10px 0 18px}
+.p3foot button{background:none; border:0; color:var(--ink-2); font:inherit; font-size:13px; cursor:pointer}
+.goodnight{margin:0 24px 16px; padding:16px; border:1px solid var(--line); border-radius:var(--r);
+  text-align:center; display:none}
+.goodnight.on{display:block}
+.goodnight .g{font-size:19px; font-weight:600; letter-spacing:-0.02em}
+.goodnight .s{font-size:13px; color:var(--ink-3); margin-top:4px}
+.goodnight.on ~ .p3foot{display:none}
+
+/* ---- P4 ---- */
+.profile{display:flex; align-items:center; gap:14px; padding:4px 0 18px}
+.avatar{width:44px; height:44px; border-radius:50%; background:var(--surface); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; font-weight:600}
+.listrow{display:flex; align-items:center; gap:12px; padding:14px 0; border-top:1px solid var(--line); font-size:15px}
+.listrow .v{margin-left:auto; color:var(--ink-3); font-size:13px}
+.foot{margin-top:26px; font-size:12px; color:var(--ink-3); line-height:2}
+
+.tabbar{display:flex; border-top:1px solid var(--line); padding:8px 0 calc(8px + env(safe-area-inset-bottom,12px))}
+.tabbar button{flex:1; background:none; border:0; color:var(--ink-3); font:inherit; font-size:12px;
+  display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer}
+.tabbar button svg{width:20px; height:20px}
+.tabbar button.sel{color:var(--ink)}
+body[data-s="s2"] .tabbar, body[data-s="s3"] .tabbar{display:none}
+
+.toast{position:absolute; left:50%; top:18px; transform:translateX(-50%); background:var(--surface);
+  border:1px solid var(--line); color:var(--ink); font-size:13px; padding:8px 16px; border-radius:999px;
+  opacity:0; pointer-events:none; transition:opacity .25s; z-index:40; white-space:nowrap}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body data-s="s1">
+
+<aside class="notes">
+  <h1>变体 A · impeccable</h1>
+  <p>规则源：<b>pbakaus/impeccable</b>（craft-floor.md）。暗色来自使用场景（睡前的房间），不是品类习惯。</p>
+  <ul>
+    <li>发丝线承担分隔，<b>不用阴影和卡片</b>；圆角固定 14px</li>
+    <li>颜色用 OKLCH 声明；次级文字从月色相调浅，不用灰</li>
+    <li>图标全部自绘 SVG，同一笔画；无 emoji、无渐变、无玻璃</li>
+    <li>选区 / 光标 / 滚动条 / 焦点环都跟主题</li>
+    <li>只有一个 authored 动效：播放键落地时上浮一次</li>
+  </ul>
+  <p>对比看：A 克制精密 · B 平涂色块 · C 圆润卡通。</p>
+</aside>
+
+<div class="phone" id="phone">
+  <div class="toast" id="toast"></div>
+
+  <section class="screen on" id="s1"><div class="scroll">
+    <h1>今晚讲点什么？</h1>
+    <p class="sub">一句话，变成一个带插图和朗读的睡前故事。</p>
+    <label class="field"><input id="inp" maxlength="40" placeholder="例：小兔子第一次自己睡觉" aria-label="故事主题"></label>
+    <div class="chips" id="chips"></div>
+    <div class="rowline"><span>时长</span>
+      <div class="seg" id="seg-len"><button data-v="3">3 分</button><button data-v="5" class="sel">5 分</button><button data-v="8">8 分</button></div>
+    </div>
+    <div class="rowline"><span>音色</span>
+      <div class="seg" id="seg-voice"><button data-v="sister" class="sel">温柔姐姐</button><button data-v="grandpa">故事爷爷</button><button data-v="peer">小伙伴</button></div>
+    </div>
+    <button class="primary" id="go" disabled>先写一句话</button>
+    <p class="quota" id="quota">今日剩 3 次</p>
+    <h2>最近</h2>
+    <div id="recent"></div>
+  </div></section>
+
+  <section class="screen" id="s2"><div class="scroll">
+    <div class="p2head">
+      <h1 id="p2t" style="font-size:22px">正在编故事</h1>
+      <div class="dots" id="dots"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="stage" id="stage">听听这句话…</div>
+    </div>
+    <div id="stream" style="padding:0 24px"></div>
+    <div style="padding:0 24px"><button class="ghost" id="cancel">取消，次数退回</button></div>
+  </div></section>
+
+  <section class="screen" id="s3">
+    <div class="phead"><button class="back" id="back" aria-label="返回">‹</button><span class="ptitle" id="p3t"></span></div>
+    <div class="aigc">内容由AI生成 · 故事与插图均为人工智能生成</div>
+    <div class="art" id="art"></div>
+    <div class="lines" id="lines"></div>
+    <div class="seek" id="seek"><b></b></div>
+    <div class="times"><span id="tc">0:00</span><span id="ts">段 1/4</span><span id="ta">0:00</span></div>
+    <div class="controls">
+      <button class="ctl" id="prev" aria-label="上一段"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 5v14M15 12 6 5v14z" stroke-linejoin="round"/></svg></button>
+      <button class="ctl main wait" id="play" aria-label="播放"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="ctl" id="next" aria-label="下一段"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 5v14M9 12l9-7v14z" stroke-linejoin="round"/></svg></button>
+    </div>
+    <p class="hint" id="hint">点一下，就开始念</p>
+    <div class="goodnight" id="gn"><div class="g" id="gnt">晚安</div><div class="s">今天到这里，明晚再讲一个新的</div></div>
+    <div class="p3foot"><button id="fav">收藏</button><button id="again">再来一个</button></div>
+  </section>
+
+  <section class="screen" id="s4"><div class="scroll">
+    <h1>我的</h1>
+    <div class="profile" style="margin-top:22px">
+      <div class="avatar">乐</div>
+      <div><div style="font-weight:500">乐乐 · 5岁</div><div style="font-size:12px;color:var(--ink-3)">已讲 12 个故事</div></div>
+    </div>
+    <h2 style="margin-top:8px">收藏</h2>
+    <div id="mylist"></div>
+    <h2>设置</h2>
+    <div class="listrow">默认音色<span class="v">温柔姐姐</span></div>
+    <div class="listrow" id="darkrow">深色更暗<span class="v" id="darkv">开</span></div>
+    <p class="foot">隐私政策 · 用户协议 · 意见反馈<br>内容说明（AI 生成）</p>
+  </div></section>
+
+  <nav class="tabbar" id="tabbar">
+    <button data-g="s1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 4h6v16H5zM13 4h6v16h-6z" stroke-linejoin="round"/></svg>讲故事</button>
+    <button data-g="s4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4"/></svg>我的</button>
+  </nav>
+</div>
+
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const STORIES={
+ rabbit:{id:'rabbit',title:'小兔子第一次自己睡觉',no:5,min:5,segs:[
+  [{t:'兔子的房间今晚特别安静。',a:0,b:3000},{t:'月亮把光轻轻放在地板上。',a:3000,b:6600}],
+  [{t:'它抱紧小毯子，数到十。',a:6600,b:10200},{t:'可是怎么数，也数不到睡着。',a:10200,b:14400}],
+  [{t:'一，二，一，二……耳朵数不完。',a:14400,b:18600},{t:'窗外的雨，也跟着一起数。',a:18600,b:22800}],
+  [{t:'兔子听见雨声，慢慢闭上眼睛。',a:22800,b:27000},{t:'晚安，第一次自己睡觉的小兔子。',a:27000,b:32000}]]},
+ elephant:{id:'elephant',title:'怕打雷的小象',no:12,min:3,segs:[
+  [{t:'天空轰隆一声，小象躲进了桌子底下。',a:0,b:3600},{t:'它的长鼻子把自己卷成一个小球。',a:3600,b:7200}],
+  [{t:'妈妈说，雷是云在打招呼。',a:7200,b:10800},{t:'小象探出鼻尖，听了一下。',a:10800,b:14400}],
+  [{t:'轰隆，轰隆，云在说：在吗？',a:14400,b:18000},{t:'小象用鼻子回答：在呀。',a:18000,b:21600}],
+  [{t:'雨点敲窗户，像在敲门。',a:21600,b:25200},{t:'小象打着哈欠，睡着了。',a:25200,b:28800}]]},
+ moon:{id:'moon',title:'月亮去哪了',no:11,min:8,segs:[
+  [{t:'今晚的天上，月亮不在。',a:0,b:3600},{t:'小狐狸决定去找它。',a:3600,b:7200}],
+  [{t:'它问了池塘，池塘里有一个。',a:7200,b:10800},{t:'它问了窗户，窗户里也有一个。',a:10800,b:14400}],
+  [{t:'原来月亮没有走远，',a:14400,b:18000},{t:'它只是挨家挨户地道晚安。',a:18000,b:21600}],
+  [{t:'最后一站，是小狐狸的被窝。',a:21600,b:25200},{t:'月亮躺下来，一起睡了。',a:25200,b:28800}]]}};
+const LIB=['rabbit','elephant','moon'];
+const CHIPS=['怕打雷','分床睡','第一天上学','被抢玩具','牙齿掉了','交朋友'];
+const BLOCK=['鬼','死','杀','打屁股'];
+const S={story:STORIES.rabbit,quota:3,cur:0,playing:false,wait:true,ended:false,fav:{rabbit:false,elephant:true,moon:false}};
+let raf=0, gen={alive:false};
+const total=()=>S.story.segs.at(-1).at(-1).b;
+const flat=()=>S.story.segs.flat();
+const fmt=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+/*  crisp geometry: moon disc + star points + hill arcs, one flat language  */
+function art(i){
+  const P=[['oklch(0.815 0.125 75)',90,86],['oklch(0.815 0.125 75)',210,70],['oklch(0.815 0.125 75)',150,110],['oklch(0.815 0.125 75)',60,60]];
+  const [c,mx,my]=P[i%4];
+  return `<svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <circle cx="${mx}" cy="${my}" r="46" fill="${c}"/>
+    <circle cx="${mx+20}" cy="${my-12}" r="40" fill="var(--surface)"/>
+    <circle cx="238" cy="60" r="2.4" fill="var(--ink-3)"/><circle cx="60" cy="150" r="2" fill="var(--ink-3)"/>
+    <circle cx="262" cy="170" r="1.8" fill="var(--ink-3)"/><circle cx="120" cy="40" r="1.6" fill="var(--ink-3)"/>
+    <path d="M0 320q75-58 150-14t150-6v100H0z" fill="oklch(0.30 0.02 262)"/>
+    <path d="M0 356q90-40 180-6t120-10v60H0z" fill="oklch(0.34 0.02 262)"/>
+  </svg>`;
+}
+function toast(m){const t=$('#toast'); t.textContent=m; t.classList.add('on');
+  clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('on'),2200);}
+function show(id){ $$('.screen').forEach(x=>x.classList.toggle('on',x.id===id));
+  document.body.dataset.s=id;
+  $$('#tabbar button').forEach(b=>b.classList.toggle('sel',b.dataset.g===id)); }
+function validate(){ const v=$('#inp').value.trim(), b=$('#go');
+  b.disabled=v.length<1||S.quota<=0;
+  b.textContent=S.quota<=0?'今日次数用完了，明天再来':(v.length<1?'先写一句话':`生成故事 · 今日剩 ${S.quota} 次`); }
+function renderP1(){
+  $('#chips').innerHTML=CHIPS.map(c=>`<button class="chip">${c}</button>`).join('');
+  $('#chips').onclick=e=>{const b=e.target.closest('.chip'); if(!b)return;
+    const i=$('#inp'); i.value=b.textContent; i.focus(); i.setSelectionRange(i.value.length,i.value.length); validate();};
+  $('#recent').innerHTML=LIB.slice(0,2).map((k,i)=>`<div class="card" data-k="${k}">${art(i)}
+    <div><div class="t">${STORIES[k].title}</div><div class="s">第 ${STORIES[k].no} 个 · 约 ${STORIES[k].min} 分钟</div></div></div>`).join('');
+  $('#recent').onclick=e=>{const c=e.target.closest('.card'); if(c) openLib(c.dataset.k);};
+  $$('.seg').forEach(g=>g.onclick=e=>{const b=e.target.closest('button'); if(!b)return;
+    [...g.children].forEach(x=>x.classList.remove('sel')); b.classList.add('sel');});
+  $('#inp').oninput=validate; validate();
+}
+function renderP4(){
+  $('#mylist').innerHTML=LIB.filter(k=>S.fav[k]).map((k,i)=>`<div class="card" data-k="${k}" style="border-top:1px solid var(--line)">${art(i+1)}
+    <div><div class="t">${STORIES[k].title}</div><div class="s">第 ${STORIES[k].no} 个 · 约 ${STORIES[k].min} 分钟</div></div></div>`).join('')
+    ||'<p style="color:var(--ink-3);font-size:14px">还没有收藏</p>';
+  $('#mylist').onclick=e=>{const c=e.target.closest('.card'); if(c) openLib(c.dataset.k);};
+}
+const stage=(i,t)=>{ $('#dots').children[i]?.classList.add('on'); $('#stage').textContent=t; };
+function start(){
+  const raw=$('#inp').value.trim();
+  if(raw.length<2){ toast('再多写一点点？'); return; }
+  if(BLOCK.some(w=>raw.includes(w))){ toast('这句话我们讲不了，换一个试试'); return; }
+  S.quota--; $('#quota').textContent=`今日剩 ${S.quota} 次`; validate();
+  show('s2'); runGen(raw);
+}
+function runGen(raw){
+  gen={alive:true};
+  const k=raw.includes('雷')?'elephant':raw.includes('月亮')?'moon':'rabbit';
+  const st=JSON.parse(JSON.stringify(STORIES[k]));
+  $('#p2t').textContent=`正在给乐乐编故事`;
+  $('#stream').innerHTML=''; $('#dots').innerHTML='<i></i><i></i><i></i><i></i><i></i>';
+  stage(0,'听听这句话…');
+  after(600,()=>stage(1,'在想故事…'));
+  after(1400,()=>{ stage(1,'写下来啦，一段一段给你看'); stream(st,0); });
+  function stream(st,i){
+    if(!gen.alive)return;
+    if(i>=st.segs.length){ stage(3,'请来温柔姐姐念给你听');
+      after(1200,()=>{ stage(4,'可以开始啦'); after(500,()=>openStory(st,true)); }); return; }
+    if(i===0) stage(2,'正在画插图');
+    const d=document.createElement('div'); d.className='para';
+    d.textContent=st.segs[i].map(x=>x.t).join(''); $('#stream').appendChild(d);
+    requestAnimationFrame(()=>d.classList.add('in'));
+    after(760,()=>stream(st,i+1));
+  }
+}
+const after=(ms,fn)=>{gen.timer=setTimeout(fn,ms);};
+$('#cancel').onclick=()=>{ gen.alive=false; clearTimeout(gen.timer);
+  S.quota++; $('#quota').textContent=`今日剩 ${S.quota} 次`; validate(); show('s1'); toast('已取消 · 本次次数退回'); };
+function openLib(k){ openStory(JSON.parse(JSON.stringify(STORIES[k])),false); }
+function openStory(st,fromGen){
+  S.story=st; S.cur=0; S.playing=false; S.wait=true; S.ended=false;
+  $('#p3t').textContent=st.title; $('#ta').textContent=fmt(total()/1000);
+  $('#art').innerHTML=st.segs.map((_,i)=>art(i)).join('');
+  $('#gn').classList.remove('on'); $('#fav').textContent=S.fav[st.id]?'已收藏':'收藏';
+  markPlay(); paint(true); show('s3');
+  if(fromGen) toast('好了，点播放键开始');
+}
+function markPlay(){
+  const p=$('#play');
+  p.classList.toggle('wait',S.wait);
+  p.innerHTML=S.playing
+    ?'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>'
+    :'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+  $('#hint').textContent=S.wait?'点一下，就开始念':S.ended?'已经讲完啦，明晚再讲':S.playing?'温柔姐姐 · 雨声':'已暂停，随时继续';
+}
+function segOf(cur){ const f=flat(); let i=0; f.forEach((x,k)=>{if(cur>=x.a)i=k;});
+  let acc=0; for(let s=0;s<S.story.segs.length;s++){ acc+=S.story.segs[s].length; if(i<acc)return s; } return 0; }
+let shownSeg=-1;
+function paint(force){
+  const f=flat(); let ci=0; f.forEach((x,i)=>{if(S.cur>=x.a)ci=i;});
+  const si=segOf(S.cur);
+  if(si!==shownSeg||force){ shownSeg=si;
+    $('#lines').innerHTML=S.story.segs[si].map((x,i2)=>`<div class="line" data-i="${si*2+i2}">${x.t}</div>`).join('');
+    $('#lines').onclick=e=>{const l=e.target.closest('.line'); if(!l)return;
+      S.cur=f[+l.dataset.i].a; S.ended=false; $('#gn').classList.remove('on'); paint();};
+    [...$('#art').children].forEach((a,i)=>a.classList.toggle('on',i===si));
+    $('#ts').textContent=`段 ${si+1}/${S.story.segs.length}`;
+  }
+  [...$('#lines').children].forEach((el,i2)=>el.classList.toggle('cur',si*2+i2===ci));
+  $('#seek b').style.width=(S.cur/total()*100)+'%';
+  $('#tc').textContent=fmt(S.cur/1000);
+}
+function tick(){ cancelAnimationFrame(raf); let prev=performance.now();
+  const loop=now=>{ if(!S.playing)return;
+    S.cur=Math.min(total(),S.cur+(now-prev)); prev=now; paint();
+    if(S.cur>=total()) return finish();
+    raf=requestAnimationFrame(loop); };
+  raf=requestAnimationFrame(loop); }
+function finish(){ S.playing=false; S.ended=true; S.wait=false; cancelAnimationFrame(raf);
+  markPlay(); paint(); $('#gnt').textContent='晚安，乐乐'; $('#gn').classList.add('on'); }
+$('#play').onclick=()=>{ if(S.cur>=total()){S.cur=0;S.ended=false;$('#gn').classList.remove('on');}
+  S.wait=false;
+  if(!S.playing){ S.playing=true; markPlay(); tick(); } else { S.playing=false; cancelAnimationFrame(raf); markPlay(); } };
+$('#prev').onclick=()=>jump(-1); $('#next').onclick=()=>jump(1);
+function jump(d){ let si=segOf(S.cur)+d; si=Math.max(0,Math.min(S.story.segs.length-1,si));
+  S.cur=S.story.segs[si][0].a; S.ended=false; $('#gn').classList.remove('on'); paint(); }
+$('#seek').onclick=e=>{ const r=$('#seek').getBoundingClientRect();
+  S.cur=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*total();
+  S.ended=false; $('#gn').classList.remove('on'); paint(); };
+$('#back').onclick=()=>{ S.playing=false; cancelAnimationFrame(raf); renderP1(); show('s1'); };
+$('#fav').onclick=()=>{ S.fav[S.story.id]=!S.fav[S.story.id];
+  $('#fav').textContent=S.fav[S.story.id]?'已收藏':'收藏'; renderP4(); renderP1();
+  toast(S.fav[S.story.id]?'已收藏，不会被清理':'已取消收藏'); };
+$('#again').onclick=()=>{ if(S.quota<=0){toast('今日次数用完了，明天再来');return;}
+  S.quota--; $('#quota').textContent=`今日剩 ${S.quota} 次`; validate(); show('s2');
+  runGen(LIB[(LIB.indexOf(S.story.id)+1)%LIB.length]==='elephant'?'雷':'月亮'); };
+$('#tabbar').onclick=e=>{ const b=e.target.closest('button'); if(!b)return;
+  S.playing=false; cancelAnimationFrame(raf);
+  if(b.dataset.g==='s1'){ renderP1(); show('s1'); } else { renderP4(); show('s4'); } };
+$('#darkrow').onclick=()=>{ const on=document.body.classList.toggle('dim');
+  $('#darkv').textContent=on?'更暗':'开'; };
+$('#go').onclick=start;
+function fit(){ const k=Math.min(1,(innerHeight-48)/844); $('#phone').style.setProperty('--k',k.toFixed(3)); }
+addEventListener('resize',fit); fit();
+renderP1(); renderP4(); show('s1');
+</script>
+<style>
+body.dim{--ground:oklch(0.16 0.014 262); --surface:oklch(0.20 0.014 262)}
+</style>
+</body>
+</html>
