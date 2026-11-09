@@ -1,0 +1,77 @@
+.head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  padding: 16rpx 24rpx 0;
+}
+
+.search {
+  height: 64rpx;
+  background: #F2F2F2;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  color: #999;
+  font-size: 26rpx;
+}
+
+.si { width: 32rpx; height: 32rpx; }
+
+/* scroll-view 上的 display:flex 作用不到子节点，所以用等宽 inline-block 均分：
+   四个板块各占 25% 并居中，右侧不再留白；板块再多时超宽仍走 scroll-x 横滑 */
+.tabs { white-space: nowrap; margin-top: 20rpx; }
+
+.tab {
+  display: inline-block;
+  width: 25%;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 30rpx;
+  color: #666;
+  padding: 0 0 18rpx;
+  position: relative;
+}
+
+.tab.on { color: #1a1a1a; font-weight: 600; }
+
+.tab.on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8rpx;
+  width: 44rpx;
+  height: 6rpx;
+  border-radius: 4rpx;
+  background: #07C160;
+}
+
+.feed { padding: 20rpx 24rpx 24rpx; }
+
+.end {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  padding: 12rpx 0 calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.fail {
+  margin: 0 24rpx calc(48rpx + env(safe-area-inset-bottom));
+  padding: 32rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  text-align: center;
+}
+.fail-msg { font-size: 26rpx; color: #e6573c; line-height: 1.6; word-break: break-all; }
+.fail-btn {
+  display: inline-block;
+  margin-top: 20rpx;
+  padding: 12rpx 48rpx;
+  font-size: 26rpx;
+  color: #fff;
+  background: #07C160;
+  border-radius: 999rpx;
+}

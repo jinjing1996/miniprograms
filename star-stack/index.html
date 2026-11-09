@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>星栈 StarStack · 小程序原型</title>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<style>
+:root{
+  --green:#07C160;
+  --green-light:#e8f9ef;
+  --text:#1a1a1a;
+  --text-2:#666;
+  --text-3:#999;
+  --bg:#F2F2F2;
+  --line:#EDEDED;
+  --orange:#FA5151;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+iconify-icon{display:inline-block;vertical-align:-0.18em}
+body{
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#1c1f26;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;gap:40px;padding:24px;
+}
+.stage-note{color:#8a93a6;font-size:13px;line-height:2;max-width:260px}
+.stage-note h1{color:#fff;font-size:18px;margin-bottom:12px}
+.stage-note b{color:#cfd6e0}
+
+/* ===== 手机外壳 ===== */
+.phone{
+  width:375px;height:812px;background:#000;border-radius:44px;padding:8px;
+  box-shadow:0 24px 80px rgba(0,0,0,.6);flex-shrink:0;position:relative;
+}
+.screen{
+  width:100%;height:100%;background:var(--bg);border-radius:36px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* ===== 状态栏 + 导航栏 ===== */
+.statusbar{
+  height:44px;background:#fff;display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 20px 6px;font-size:12px;font-weight:600;color:#000;flex-shrink:0;
+}
+.statusbar .icons{display:flex;gap:5px;align-items:center}
+.navbar{
+  height:44px;background:#fff;display:flex;align-items:center;justify-content:center;
+  position:relative;flex-shrink:0;border-bottom:.5px solid var(--line);
+}
+.navbar .title{font-size:17px;font-weight:600;color:var(--text)}
+.capsule{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  width:87px;height:32px;border:1px solid rgba(0,0,0,.1);border-radius:16px;
+  background:rgba(255,255,255,.6);display:flex;align-items:center;
+}
+.capsule span{flex:1;text-align:center;font-size:14px;color:#000}
+.capsule .div{width:1px;height:18px;background:rgba(0,0,0,.1)}
+
+/* ===== 页面容器 ===== */
+.page{flex:1;overflow-y:auto;display:none;flex-direction:column;background:var(--bg)}
+.page.active{display:flex}
+.page::-webkit-scrollbar{display:none}
+
+/* ===== 首页：搜索 + 频道 ===== */
+.home-head{background:#fff;padding:8px 12px 0;position:sticky;top:0;z-index:5}
+.searchbar{
+  height:32px;background:var(--bg);border-radius:16px;display:flex;align-items:center;
+  justify-content:center;color:var(--text-3);font-size:13px;gap:6px;
+}
+.chan-tabs{display:flex;margin-top:10px;gap:22px;overflow-x:auto;padding-bottom:0}
+.chan-tabs::-webkit-scrollbar{display:none}
+.chan-tab{
+  font-size:15px;color:var(--text-2);padding-bottom:9px;cursor:pointer;
+  position:relative;white-space:nowrap;flex-shrink:0;
+}
+.chan-tab.on{color:var(--text);font-weight:600}
+.chan-tab.on::after{
+  content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:4px;
+  width:22px;height:3px;border-radius:2px;background:var(--green);
+}
+.feed{padding:10px 12px 90px}
+
+/* ===== 通用卡片 ===== */
+.card{
+  background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;
+}
+.card:active{transform:scale(.985)}
+.card-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;
+}
+.card-head .who{flex:1;min-width:0}
+.card-head .nick{font-size:14px;color:var(--text);font-weight:500}
+.card-head .time{font-size:11px;color:var(--text-3);margin-top:1px}
+.chan-badge{
+  font-size:10px;color:var(--green);background:var(--green-light);
+  border-radius:4px;padding:2px 6px;flex-shrink:0;
+}
+.chan-badge.hot{color:#e6573c;background:#fdeee9}
+.chan-badge.vibe{color:#5b6ef5;background:#eceffb}
+.card-title{font-size:16px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:6px}
+.card-desc{font-size:13px;color:var(--text-2);line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:11px;color:var(--text-2);background:var(--bg);border-radius:4px;padding:3px 8px}
+.tag.g{color:var(--green);background:var(--green-light)}
+.card-foot{
+  display:flex;align-items:center;gap:18px;margin-top:12px;padding-top:10px;
+  border-top:.5px solid var(--line);font-size:12px;color:var(--text-3);
+}
+.card-foot .act{display:flex;align-items:center;gap:4px;cursor:pointer}
+.card-foot .act.liked{color:var(--orange)}
+
+/* 项目卡片 */
+.proj-top{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.proj-logo{
+  width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-size:20px;color:#fff;font-weight:700;
+}
+.proj-meta{flex:1;min-width:0}
+.proj-meta .name{font-size:16px;font-weight:600}
+.proj-meta .stars{font-size:11px;color:var(--text-3);margin-top:2px}
+.rank-ico{font-size:12px;color:#f7b500;font-weight:700;width:18px;flex-shrink:0}
+.btn-open{
+  flex-shrink:0;font-size:12px;color:#fff;background:var(--green);border-radius:14px;
+  padding:6px 14px;cursor:pointer;
+}
+.btn-open:active{opacity:.8}
+
+/* ===== 中间 Tab Bar ===== */
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;height:78px;background:#fff;
+  border-top:.5px solid #d9d9d9;display:flex;z-index:20;padding-bottom:18px;
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;font-size:10px;color:var(--text-3);cursor:pointer;
+}
+.tab .ico{font-size:22px;line-height:1}
+.tab.on{color:var(--green)}
+.tab-pub .ico{
+  width:44px;height:44px;background:var(--green);border-radius:50%;color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:26px;
+  margin-top:-22px;box-shadow:0 4px 10px rgba(7,193,96,.4);border:4px solid #fff;
+}
+
+/* ===== 发布页 ===== */
+.form-wrap{padding:12px;flex:1}
+.form-card{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px}
+.form-card label{font-size:13px;color:var(--text-3);display:block;margin-bottom:8px}
+.form-card input,.form-card textarea{
+  width:100%;border:none;outline:none;font-size:15px;color:var(--text);
+  font-family:inherit;background:transparent;
+}
+.form-card input::placeholder,.form-card textarea::placeholder{color:#c5c5c5}
+.form-card textarea{resize:none;height:120px;line-height:1.6}
+.chan-pick{display:flex;gap:8px;flex-wrap:wrap}
+.chan-pick .cp{
+  font-size:13px;color:var(--text-2);background:var(--bg);border-radius:16px;
+  padding:7px 16px;cursor:pointer;border:1px solid transparent;
+}
+.chan-pick .cp.on{color:var(--green);background:var(--green-light);border-color:var(--green)}
+.submit-btn{
+  display:block;width:calc(100% - 24px);margin:16px auto;height:46px;border-radius:23px;
+  background:var(--green);color:#fff;font-size:16px;font-weight:600;border:none;cursor:pointer;
+}
+.submit-btn:active{opacity:.85}
+
+/* ===== 我的 ===== */
+.me-head{background:linear-gradient(160deg,var(--green) 0%,#0ad06e 60%,#F2F2F2 60.2%);padding:24px 16px 46px}
+.me-id{display:flex;align-items:center;gap:12px}
+.me-id .avatar{width:56px;height:56px;font-size:22px;border:2px solid rgba(255,255,255,.6)}
+.me-id .nm{font-size:18px;font-weight:700;color:#fff}
+.me-id .bio{font-size:12px;color:rgba(255,255,255,.85);margin-top:3px}
+.me-stats{
+  background:#fff;border-radius:12px;margin:-30px 12px 10px;display:flex;
+  padding:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.04);position:relative;
+}
+.me-stats .st{flex:1;text-align:center}
+.me-stats .n{font-size:17px;font-weight:700;color:var(--text)}
+.me-stats .l{font-size:11px;color:var(--text-3);margin-top:2px}
+.me-cell{background:#fff;margin-bottom:10px}
+.mrow{
+  display:flex;align-items:center;gap:10px;padding:14px 16px;font-size:15px;color:var(--text);
+  border-bottom:.5px solid var(--line);cursor:pointer;
+}
+.mrow:last-child{border-bottom:none}
+.mrow .arr{margin-left:auto;color:#c5c5c5;font-size:13px}
+.mrow .cnt{margin-left:auto;font-size:12px;color:var(--text-3)}
+
+/* ===== 详情页浮层 ===== */
+.detail{
+  position:absolute;inset:0;background:var(--bg);z-index:40;display:none;flex-direction:column;
+}
+.detail.open{display:flex}
+.detail-nav{
+  height:88px;background:#fff;display:flex;align-items:flex-end;padding:0 12px 8px;
+  flex-shrink:0;border-bottom:.5px solid var(--line);
+}
+.detail-nav .back{font-size:22px;color:var(--text);cursor:pointer;padding:6px 12px 6px 0}
+.detail-nav .t{flex:1;text-align:center;font-size:16px;font-weight:600;padding-bottom:4px}
+.detail-body{flex:1;overflow-y:auto;padding:14px 14px 76px}
+.detail-body::-webkit-scrollbar{display:none}
+.d-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:10px}
+.d-card .card-title{font-size:19px;margin-bottom:10px}
+.d-content{font-size:15px;color:#333;line-height:1.85;white-space:pre-wrap}
+.cm-title{font-size:14px;font-weight:600;margin:16px 2px 8px}
+.cm{display:flex;gap:8px;padding:10px 0;border-bottom:.5px solid var(--line)}
+.cm:last-child{border-bottom:none}
+.cm .avatar{width:28px;height:28px;font-size:11px}
+.cm .cbody{flex:1}
+.cm .cnick{font-size:12px;color:var(--text-3)}
+.cm .ctext{font-size:14px;color:var(--text);margin-top:3px;line-height:1.55}
+.detail-foot{
+  position:absolute;left:0;right:0;bottom:0;height:60px;background:#fff;border-top:.5px solid #d9d9d9;
+  display:flex;align-items:center;gap:10px;padding:0 14px 12px;
+}
+.detail-foot .inp{
+  flex:1;height:36px;background:var(--bg);border-radius:18px;display:flex;align-items:center;
+  padding:0 14px;font-size:13px;color:#c5c5c5;cursor:pointer;
+}
+.detail-foot .f-act{display:flex;flex-direction:column;align-items:center;font-size:10px;color:var(--text-3);cursor:pointer;gap:1px;min-width:34px}
+.detail-foot .f-act .fi{font-size:18px}
+.detail-foot .f-act.on{color:var(--orange)}
+
+/* ===== 首页增强：话题 ===== */
+.chip{font-size:12px;color:#5b6ef5;background:#eceffb;border-radius:14px;padding:5px 12px;cursor:pointer}
+.chip:active{opacity:.7}
+
+/* ===== 榜单页 ===== */
+.rank-row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer}
+.rank-row:active{transform:scale(.985)}
+.rank-row .rk{width:26px;font-size:16px;font-weight:800;color:#c5c5c5;flex-shrink:0;text-align:center}
+.rank-row .rk.top{color:#f7b500}
+.rank-row .body{flex:1;min-width:0}
+.rank-row .rt{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-row .rs{font-size:11px;color:var(--text-3);margin-top:3px}
+.grow{font-size:11px;color:var(--green);flex-shrink:0;text-align:right}
+
+/* toast */
+.toast{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.75);
+  color:#fff;font-size:14px;padding:10px 18px;border-radius:8px;z-index:99;display:none;white-space:nowrap;
+}
+</style>
+</head>
+<body>
+
+<div class="stage-note">
+  <h1>星栈 StarStack · 小程序原型</h1>
+  热门项目 / 经验分享（含 VibeCoding 技巧）<br><br>
+  <b>可交互：</b>切换频道、点开详情、点赞收藏、模拟发布。<br><br>
+  右侧为 375×812 手机视口模拟。确认设计后可直接迁移到微信小程序原生页面结构。
+</div>
+
+<div class="phone"><div class="screen">
+
+  <div class="statusbar">
+    <span>9:41</span>
+    <div class="icons"><iconify-icon icon="mdi:signal-cellular-3" width="14"></iconify-icon><iconify-icon icon="mdi:wifi" width="14"></iconify-icon><iconify-icon icon="mdi:battery-high" width="18"></iconify-icon></div>
+  </div>
+  <div class="navbar">
+    <div class="title" id="navTitle">星栈</div>
+    <div class="capsule"><span>•••</span><div class="div"></div><span>◎</span></div>
+  </div>
+
+  <!-- ============ 首页 ============ -->
+  <div class="page active" id="page-home">
+    <div class="home-head">
+      <div class="searchbar"><iconify-icon icon="mdi:magnify" width="16"></iconify-icon> 搜索项目、经验、技巧</div>
+      <div class="chan-tabs" id="chanTabs"></div>
+    </div>
+    <div class="feed" id="feed"></div>
+  </div>
+
+  <!-- ============ 发布 ============ -->
+  <div class="page" id="page-publish">
+    <div class="form-wrap">
+      <div class="form-card">
+        <label>选择板块</label>
+        <div class="chan-pick" id="pubChans"></div>
+      </div>
+      <div class="form-card">
+        <label>标题</label>
+        <input id="pubTitle" placeholder="一句话说清你的主题">
+      </div>
+      <div class="form-card">
+        <label>正文</label>
+        <textarea id="pubBody" placeholder="分享你的开发经验、踩坑记录或技巧…"></textarea>
+      </div>
+      <div class="form-card">
+        <label>标签</label>
+        <input id="pubTags" placeholder="用空格分隔，如：React 性能优化">
+      </div>
+      <button class="submit-btn" onclick="publish()">发布</button>
+    </div>
+  </div>
+
+  <!-- ============ 我的 ============ -->
+  <div class="page" id="page-me">
+    <div class="me-head">
+      <div class="me-id">
+        <div class="avatar" style="background:linear-gradient(135deg,#5b6ef5,#8f6ef5)">星</div>
+        <div>
+          <div class="nm">星标开发者</div>
+          <div class="bio">Vibe coder · 用 AI 快速造物</div>
+        </div>
+      </div>
+    </div>
+    <div class="me-stats">
+      <div class="st"><div class="n">12</div><div class="l">发布</div></div>
+      <div class="st"><div class="n">328</div><div class="l">获赞</div></div>
+      <div class="st"><div class="n">46</div><div class="l">收藏</div></div>
+      <div class="st"><div class="n">89</div><div class="l">关注</div></div>
+    </div>
+    <div class="me-cell">
+      <div class="mrow" style="justify-content:center;color:var(--green);font-weight:600" onclick="openPublish()"><iconify-icon icon="mdi:plus" width="18"></iconify-icon> 发布分享（热门项目 / 经验技巧）</div>
+    </div>
+    <div class="me-cell">
+      <div class="mrow" onclick="goChannel('热门项目')"><iconify-icon icon="mdi:text-box-outline" width="18"></iconify-icon> 我的分享 <span class="cnt">12 篇 ›</span></div>
+      <div class="mrow" onclick="toast('原型演示：收藏列表')"><iconify-icon icon="mdi:star-outline" width="18"></iconify-icon> 我的收藏 <span class="cnt">46 ›</span></div>
+      <div class="mrow" onclick="toast('原型演示：浏览历史')"><iconify-icon icon="mdi:history" width="18"></iconify-icon> 浏览历史</div>
+    </div>
+    <div class="me-cell">
+      <div class="mrow" onclick="toast('原型演示：设置页')"><iconify-icon icon="mdi:cog-outline" width="18"></iconify-icon> 设置</div>
+      <div class="mrow" onclick="toast('原型演示：意见反馈')"><iconify-icon icon="mdi:message-text-outline" width="18"></iconify-icon> 意见反馈</div>
+      <div class="mrow" onclick="toast('星栈 原型 v0.1')"><iconify-icon icon="mdi:information-outline" width="18"></iconify-icon> 关于</div>
+    </div>
+  </div>
+
+  <!-- ============ 榜单 ============ -->
+  <div class="page" id="page-rank">
+    <div class="home-head">
+      <div class="chan-tabs" id="rankTabs"></div>
+    </div>
+    <div class="feed" id="rankFeed" style="padding-top:12px"></div>
+  </div>
+
+  <!-- ============ 详情浮层 ============ -->
+  <div class="detail" id="detail">
+    <div class="detail-nav">
+      <div class="back" onclick="closeDetail()">‹</div>
+      <div class="t">详情</div>
+      <div style="width:34px"></div>
+    </div>
+    <div class="detail-body" id="detailBody"></div>
+    <div class="detail-foot">
+      <div class="inp" onclick="toast('原型演示：评论输入')">写下你的想法…</div>
+      <div class="f-act" id="dLike" onclick="detailLike()"></div>
+      <div class="f-act" id="dFav" onclick="detailFav()"></div>
+    </div>
+  </div>
+
+  <!-- ============ Tab Bar ============ -->
+  <div class="tabbar">
+    <div class="tab on" data-page="home" onclick="switchTab(this)"><div class="ico"><iconify-icon icon="mdi:home" width="24"></iconify-icon></div><div>首页</div></div>
+    <div class="tab" data-page="rank" onclick="switchTab(this)"><div class="ico"><iconify-icon icon="mdi:trophy-outline" width="24"></iconify-icon></div><div>榜单</div></div>
+    <div class="tab" data-page="me" onclick="switchTab(this)"><div class="ico"><iconify-icon icon="mdi:account-circle-outline" width="24"></iconify-icon></div><div>我的</div></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div></div>
+
+<script>
+/* ================= 数据 ================= */
+const channels = ['推荐','工具网站','热门项目','经验分享'];
+const grad = ['#07C160','#5b6ef5','#f59e0b','#e6573c','#0ea5e9','#8f6ef5'];
+const ic=(n,s=15)=>`<iconify-icon icon="${n}" width="${s}"></iconify-icon>`;
+function av(name){ const c=grad[name.charCodeAt(0)%grad.length];
+  return `<div class="avatar" style="background:${c}">${name[0]}</div>`; }
+
+let posts = [
+  {id:1,ch:'热门项目',rank:1,title:'Raycast — 取代 Spotlight 的效率启动器',desc:'基于插件生态的 macOS 快捷工具，开发者聚集度极高，插件市场年增速 300%。适合学习其插件架构与跨端设计。',tags:['macOS','插件架构','TypeScript'],stars:'78.2k',likes:1240,views:8900,author:'阿星',liked:false,
+   body:'推荐理由：\n\n1. 插件体系设计优雅，开发者贡献成本极低；\n2. 从 0 到 1 的品类创新：把启动器做成平台；\n3. 前端团队公开了大量工程实践分享。\n\n可借鉴点：本地优先 + 云同步的架构、以开发者为核心的增长飞轮。'},
+  {id:2,ch:'热门项目',rank:2,title:'Zod v4 发布：性能提升 5 倍，体积减半',desc:'TypeScript 首选校验库大版本更新，全新协议系统，值得关注生态迁移成本。',tags:['TypeScript','开源','v4'],stars:'35.6k',likes:890,views:5400,author:'小林',liked:false,
+   body:'升级要点：\n\n- 核心重写，解析性能提升约 5x；\n- 新增微型语法 z.hex()、z.uuid() 等；\n- 与 JSON Schema 双向互转。\n\n迁移建议：先用 codemod 扫一遍，再重点测试 error map 相关逻辑。'},
+  {id:3,ch:'热门项目',rank:3,title:'Ollama：本地跑大模型只需要一行命令',desc:'把 llama.cpp 封装成开发者体验极佳的本地模型服务，一周增长 2k star。',tags:['LLM','本地部署','Go'],stars:'112k',likes:2100,views:15000,author:'Kevin',liked:false,
+   body:'为什么火：\n\n- 极低门槛：curl 安装 + ollama run 即跑；\n- REST API 让本地模型秒接应用；\n- Modelfile 让微调像写 Dockerfile。\n\n搭建个人 AI 助手项目的推荐组合：Ollama + Open WebUI。'},
+  {id:4,ch:'经验分享',title:'我把重构老项目的流程总结成了这 5 步',tags:['重构','工程化'],desc:'接手 8 年老项目不敢动？先补测试、再抽边界、小步替换。这套流程帮我们把构建时间从 4min 降到 40s。',likes:672,views:4100,author:'老周',liked:false,
+   body:'五步法：\n\n1. 冻结：先给核心链路补快照测试；\n2. 划线：圈出模块边界，禁止新增跨层调用；\n3. 替换：新功能一律走新架构；\n4. 搬运：按用例逐块搬迁旧代码；\n5. 删除：旧路径流量归零后果断删掉。\n\n关键是第 5 步——很多团队只拆不删，最后两套并存。'},
+  {id:5,ch:'经验分享',title:'上线后被 PM 追问的埋点事故复盘',tags:['复盘','数据埋点'],desc:'一次字段改名导致 3 天数据全丢。分享我们的埋点契约化方案：Schema 注册 + CI 校验。',likes:445,views:3200,author:'Momo',liked:false,
+   body:'事故链：开发改了事件字段名 → 数据侧无感知 → 报表口径断裂 3 天。\n\n修复方案：\n- 所有埋点进 schema 仓库注册；\n- CI 阶段 diff 校验，破坏性改名直接 block；\n- 上线前自动比对线上/预发事件结构。\n\n教训：埋点是接口，不是日志。'},
+  {id:6,ch:'经验分享',title:'远程协作两年，我沉淀的 6 条异步沟通原则',tags:['远程办公','协作'],desc:'能写文档不开会；会议只用来做决定。异步写作的清晰度决定团队速度。',likes:531,views:3900,author:'Yumi',liked:false,
+   body:'6 条原则：\n\n1. 先给结论，再给背景；\n2. 需要回复的，写清 deadline；\n3. 文档优于聊天记录；\n4. 会议必须有 decision log；\n5. 时区重叠 3 小时是黄金协作期；\n6. 「在吗」= 直接说事。'},
+  {id:7,ch:'经验分享',title:'用 Claude Code 两天 Vibe 出一个可用小程序的全流程',tags:['Claude Code','工作流'],desc:'从提示词分层、上下文管理到真机联调，关键是先让它写 spec 再写代码。',likes:1580,views:11200,author:'阿星',liked:false,
+   body:'我的流程：\n\n1. 一句话需求 → 让它反问我 10 个问题补全需求；\n2. 生成 spec.md 并人工修订（这步最值钱）；\n3. 按 spec 拆 task list，一次只做一个任务；\n4. 每个任务完成就跑测试，红了马上修；\n5. 提交前让它自审一遍 diff。\n\n心得：Vibe 不是放任，是把「写」的活交出去，把「想」的活留下。'},
+  {id:8,ch:'经验分享',title:'Prompt 里加这一句，AI 生成的代码 bug 少一半',tags:['Prompt技巧'],desc:'「先写会失败的测试用例，再写实现」——TDD 提示词是让 AI 代码可靠的最便宜手段。',likes:2210,views:16800,author:'小林',liked:false,
+   body:'对比实验：同一需求跑 20 次。\n\n- 直接要代码：一次通过率 45%；\n- 加上「先写失败测试，再实现，最后跑测试确认」：一次通过率 82%。\n\n原理：强制模型走验证回路，而不是单向生成。'},
+  {id:9,ch:'经验分享',title:'上下文爆了怎么办？大项目喂给 AI 的分层策略',tags:['上下文管理'],desc:'AGENTS.md 当目录，模块文档当抽屉，永远不要让 AI 全仓检索。实测 token 消耗降 70%。',likes:1120,views:8700,author:'Kevin',liked:false,
+   body:'三层投喂：\n\n1. 根级 AGENTS.md：项目地图 + 约定，几百 token；\n2. 模块级 README：接口、边界、坑；\n3. 任务级：只贴直接相关的文件。\n\n配合 grep 按需取码，效果远好于整目录塞入。'},
+  {id:10,ch:'工具网站',title:'Excalidraw —— 手绘风白板，画架构图比 PPT 快 10 倍',desc:'开源免费的在线白板，手绘风格天然适合技术方案、架构图和脑暴，支持实时协作，免注册即用。',tags:['白板','架构图','开源'],likes:1830,views:9600,author:'阿星',liked:false,
+   body:'使用场景：\n\n- 写技术方案时画系统架构图，比 PPT 形状快太多；\n- 团队协作脑暴：发个链接多人同画；\n- 嵌进 README：导出 .excalidraw 文件可二次编辑。\n\n小技巧：按住 Alt 复制拖动，Library 里有现成的 AWS/K8s 图标库。'},
+  {id:11,ch:'工具网站',title:'Photopea —— 浏览器里的免费 Photoshop',desc:'打开即用的在线图片编辑器，界面和快捷键几乎复刻 PS，支持 PSD/AI/Sketch 文件，应急改图神器。',tags:['图片编辑','在线工具','免费'],likes:940,views:5200,author:'Momo',liked:false,
+   body:'为什么推荐：\n\n- 完全免费，无需安装，网页打开 photopea.com 即用；\n- 直接打开 PSD / AI / Sketch / XD 文件；\n- 快捷键与 PS 基本一致，零学习成本。\n\n适合场景：临时改设计稿、抠图、切图导出，不用再为一张图开一个 PS。'},
+  {id:12,ch:'工具网站',title:'TinyPNG + Squoosh 组合：图片资源压缩流水线',desc:'TinyPNG 批量有损压缩肉眼无感，Squoosh 精细调参，两步把首页图片体积砍掉 70%。',tags:['图片压缩','性能优化'],likes:710,views:4300,author:'Yumi',liked:false,
+   body:'我的压缩流水线：\n\n1. TinyPNG 批量过一遍（WebP 格式顺手转掉）；\n2. 首屏大图再用 Squoosh 手动调 AVIF 质量到 60-75；\n3. CI 里加 size-limit 卡住回退。\n\n实测：活动页从 4.2MB 降到 1.1MB，LCP 提升 1.3s。'},
+];
+
+let currentChan='推荐', detailId=null, dLiked=false, dFav=false;
+
+/* ================= 首页渲染 ================= */
+const badgeCls={'热门项目':'hot','经验分享':'vibe','工具网站':''};
+function renderTabs(){
+  document.getElementById('chanTabs').innerHTML = channels.map(c=>
+    `<div class="chan-tab ${c===currentChan?'on':''}" onclick="setChan('${c}')">${c}</div>`).join('');
+}
+function renderFeed(){
+  const list = currentChan==='推荐' ? posts : posts.filter(p=>p.ch===currentChan);
+  document.getElementById('feed').innerHTML = list.map(p=>{
+    if(p.ch==='热门项目') return `
+    <div class="card" onclick="openDetail(${p.id})">
+      <div class="proj-top">
+        ${p.rank?`<div class="rank-ico">#${p.rank}</div>`:''}
+        <div class="proj-logo" style="background:${grad[p.id%grad.length]}">${p.title[0]}</div>
+        <div class="proj-meta">
+          <div class="name">${p.title.split('—')[0].split('：')[0].trim()}</div>
+          <div class="stars">${ic('mdi:star',12)} ${p.stars} · ${ic('mdi:fire',12)} ${p.views} 人在看</div>
+        </div>
+        <div class="btn-open" onclick="event.stopPropagation();toast('原型演示：跳转项目详情')">看看</div>
+      </div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      ${foot(p)}
+    </div>`;
+    return `
+    <div class="card" onclick="openDetail(${p.id})">
+      <div class="card-head">
+        ${av(p.author)}
+        <div class="who"><div class="nick">${p.author}</div><div class="time">${p.id*3} 小时前 · 阅读 ${p.views}</div></div>
+        <div class="chan-badge ${badgeCls[p.ch]}">${p.ch}</div>
+      </div>
+      <div class="card-title">${p.title}</div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="tags">${p.tags.map(t=>`<span class="tag g">#${t}</span>`).join('')}</div>
+      ${foot(p)}
+    </div>`;
+  }).join('');
+}
+function foot(p){return `
+  <div class="card-foot">
+    <div class="act ${p.liked?'liked':''}" onclick="event.stopPropagation();toggleLike(${p.id})">${ic(p.liked?'mdi:heart':'mdi:heart-outline',15)} ${p.likes}</div>
+    <div class="act" onclick="event.stopPropagation();openDetail(${p.id})">${ic('mdi:chat-outline',15)} ${(p.likes/47|0)+3}</div>
+    <div class="act" onclick="event.stopPropagation();toast('已加入收藏')">${ic('mdi:star-outline',15)} 收藏</div>
+  </div>`;}
+
+function setChan(c){currentChan=c;renderTabs();renderFeed();
+  document.getElementById('feed').scrollIntoView({block:'start'});
+  document.getElementById('page-home').scrollTop=0;}
+
+/* ================= 榜单 ================= */
+const rankChannels=['项目飙升榜','工具热度榜','经验热帖榜'];
+let currentRank='项目飙升榜';
+function renderRankTabs(){
+  document.getElementById('rankTabs').innerHTML = rankChannels.map(c=>
+    `<div class="chan-tab ${c===currentRank?'on':''}" onclick="setRank('${c}')">${c}</div>`).join('');
+}
+function renderRank(){
+  const el=document.getElementById('rankFeed');
+  if(currentRank==='项目飙升榜'){
+    const list=posts.filter(p=>p.ch==='热门项目');
+    el.innerHTML=list.map((p,i)=>`
+      <div class="rank-row" onclick="openDetail(${p.id})">
+        <div class="rk ${i<3?'top':''}">${i<3?ic('mdi:trophy',20):i+1}</div>
+        <div class="hlogo" style="width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;background:${grad[p.id%grad.length]}">${p.title[0]}</div>
+        <div class="body">
+          <div class="rt">${p.title.split('—')[0].split('：')[0].trim()}</div>
+          <div class="rs">${ic('mdi:star',12)} ${p.stars} · ${ic('mdi:fire',12)} ${p.views} 人在看</div>
+        </div>
+        <div class="grow">本周<br>+${(p.likes/100).toFixed(1)}k</div>
+      </div>`).join('');
+  }else if(currentRank==='工具热度榜'){
+    const list=posts.filter(p=>p.ch==='工具网站').sort((a,b)=>b.likes-a.likes);
+    el.innerHTML=list.map((p,i)=>`
+      <div class="rank-row" onclick="openDetail(${p.id})">
+        <div class="rk ${i<3?'top':''}">${i<3?ic('mdi:toolbox-outline',20):i+1}</div>
+        <div class="body">
+          <div class="rt">${p.title.split('——')[0].trim()}</div>
+          <div class="rs">${p.title.split('——').slice(1).join('——').trim()||p.tags.join(' · ')}</div>
+        </div>
+        <div class="grow">${ic('mdi:heart',12)} ${p.likes}<br>收藏 ${(p.likes*0.6).toFixed(0)}</div>
+      </div>`).join('');
+  }else{
+    const list=posts.filter(p=>p.ch==='经验分享').sort((a,b)=>b.likes-a.likes);
+    el.innerHTML=list.map((p,i)=>`
+      <div class="rank-row" onclick="openDetail(${p.id})">
+        <div class="rk ${i<3?'top':''}">${i<3?ic('mdi:trophy',20):i+1}</div>
+        <div class="body">
+          <div class="rt">${p.title}</div>
+          <div class="rs">${p.author} · ${ic('mdi:heart',12)} ${p.likes} · ${ic('mdi:eye-outline',12)} ${p.views}</div>
+        </div>
+        <div class="grow">热度<br>${(p.likes+p.views/10).toFixed(0)}</div>
+      </div>`).join('');
+  }
+}
+function setRank(c){currentRank=c;renderRankTabs();renderRank();document.getElementById('page-rank').scrollTop=0;}
+function toggleLike(id){const p=posts.find(x=>x.id===id);
+  p.liked=!p.liked;p.likes+=p.liked?1:-1;renderFeed();
+  if(detailId===id)renderDetailFoot();}
+function goChannel(c){setChan(c);switchTabByName('home');}
+
+/* ================= Tab 切换 ================= */
+function switchTab(el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  show(el.dataset.page);
+}
+function switchTabByName(name){markTab(name);show(name);}
+function markTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.page===name));
+}
+function openPublish(){markTab('me');show('publish');}
+function show(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.getElementById('navTitle').textContent =
+    name==='home'?'星栈':name==='publish'?'发布分享':name==='rank'?'热门榜单':'我的';
+}
+
+/* ================= 发布 ================= */
+const pubChannels=['工具网站','热门项目','经验分享'];
+let pubChan='经验分享';
+function renderPubChans(){
+  document.getElementById('pubChans').innerHTML = pubChannels.map(c=>
+    `<div class="cp ${c===pubChan?'on':''}" onclick="pubChan='${c}';renderPubChans()">${c}</div>`).join('');
+}
+function publish(){
+  const t=document.getElementById('pubTitle').value.trim();
+  const b=document.getElementById('pubBody').value.trim();
+  if(!t||!b){toast('请填写标题和正文');return;}
+  const tags=document.getElementById('pubTags').value.trim().split(/\s+/).filter(Boolean);
+  posts.unshift({id:Date.now(),ch:pubChan,title:t,desc:b,body:b,
+    tags:tags.length?tags:['新帖'],likes:0,views:1,author:'星标开发者',liked:false});
+  document.getElementById('pubTitle').value='';
+  document.getElementById('pubBody').value='';
+  document.getElementById('pubTags').value='';
+  setChan(pubChan);switchTabByName('home');toast('发布成功');
+}
+
+/* ================= 详情 ================= */
+const comments=[
+  {n:'路人甲',c:'学到了，正好在手搓类似的东西'},
+  {n:'DevZw',c:'第 3 点深有同感，我们团队踩过一模一样的坑'},
+  {n:'小鱼',c:'有完整的 demo 仓库链接吗？'},
+];
+function openDetail(id){detailId=id;const p=posts.find(x=>x.id===id);
+  dLiked=p.liked;dFav=false;
+  document.getElementById('detailBody').innerHTML=`
+    <div class="d-card">
+      <div class="card-head">${av(p.author)}
+        <div class="who"><div class="nick">${p.author}</div><div class="time">${p.id*3%23+1} 小时前</div></div>
+        <div class="chan-badge ${badgeCls[p.ch]}">${p.ch}</div>
+      </div>
+      <div class="card-title">${p.title}</div>
+      <div class="tags">${p.tags.map(t=>`<span class="tag g">#${t}</span>`).join('')}</div>
+      <div class="d-content" style="margin-top:14px">${p.body}</div>
+    </div>
+    <div class="d-card">
+      <div class="cm-title">评论 ${comments.length}</div>
+      ${comments.map(m=>`<div class="cm">${av(m.n)}<div class="cbody">
+        <div class="cnick">${m.n}</div><div class="ctext">${m.c}</div></div></div>`).join('')}
+    </div>`;
+  renderDetailFoot();
+  document.getElementById('detail').classList.add('open');
+}
+function renderDetailFoot(){
+  const p=posts.find(x=>x.id===detailId);
+  document.getElementById('dLike').className='f-act'+(dLiked?' on':'');
+  document.getElementById('dLike').innerHTML=`<span class="fi">${ic(dLiked?'mdi:heart':'mdi:heart-outline',20)}</span><span>${p.likes}</span>`;
+  document.getElementById('dFav').className='f-act'+(dFav?' on':'');
+  document.getElementById('dFav').innerHTML=`<span class="fi">${ic(dFav?'mdi:star':'mdi:star-outline',20)}</span><span>收藏</span>`;
+}
+function detailLike(){const p=posts.find(x=>x.id===detailId);
+  dLiked=!dLiked;p.likes+=dLiked?1:-1;p.liked=dLiked;renderFeed();renderDetailFoot();}
+function detailFav(){dFav=!dFav;renderDetailFoot();if(dFav)toast('已加入收藏');}
+function closeDetail(){document.getElementById('detail').classList.remove('open');}
+
+/* ================= toast ================= */
+let toastTimer;
+function toast(msg){const el=document.getElementById('toast');
+  el.textContent=msg;el.style.display='block';
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',1600);}
+
+renderTabs();renderFeed();renderPubChans();renderRankTabs();renderRank();
+</script>
+</body>
+</html>

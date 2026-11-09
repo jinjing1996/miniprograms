@@ -1,0 +1,39 @@
+<view class="card" bindtap="onTap">
+  <block wx:if="{{post.ch === '热门项目'}}">
+    <view class="proj-top">
+      <image wx:if="{{avatarUrl}}" class="proj-logo img" src="{{avatarUrl}}" mode="aspectFill" lazy-load />
+      <view wx:else class="proj-logo" style="background:{{avatarBg}}">{{post.title[0]}}</view>
+      <view class="proj-meta">
+        <view class="name">{{shortName}}</view>
+        <view class="stars">
+          <block wx:if="{{post.stars}}"><image class="ci" src="{{starFill}}" />{{post.stars}} · </block>
+          <image class="ci" src="{{fire}}" />{{post.views}} 人在看
+        </view>
+      </view>
+      <view class="btn-open">看看</view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class="head">
+      <image wx:if="{{avatarUrl}}" class="avatar img" src="{{avatarUrl}}" mode="aspectFill" lazy-load />
+      <view wx:else class="avatar" style="background:{{avatarBg}}">{{post.author[0]}}</view>
+      <view class="who">
+        <view class="nick">{{post.author}}</view>
+        <view class="time">{{post.hours}} 小时前 · 阅读 {{post.views}}</view>
+      </view>
+      <view class="chan-badge {{badge}}">{{post.ch}}</view>
+    </view>
+  </block>
+  <view class="title">{{post.title}}</view>
+  <view class="desc">{{post.desc}}</view>
+  <view class="tags">
+    <text wx:for="{{post.tags}}" wx:key="*this" class="tag g">#{{item}}</text>
+  </view>
+  <view class="foot">
+    <view class="act" catchtap="onLike">
+      <image class="ci" src="{{heart}}" /><text>{{post.likes}}</text>
+    </view>
+    <view class="act"><image class="ci" src="{{chat}}" /><text>{{commentCnt}}</text></view>
+    <view class="act" catchtap="onFav"><image class="ci" src="{{star}}" /><text>收藏</text></view>
+  </view>
+</view>

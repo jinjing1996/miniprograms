@@ -1,0 +1,12 @@
+<view class="bar">
+  <view
+    wx:for="{{tabs}}"
+    wx:key="text"
+    class="tab {{selected === index ? 'on' : ''}}"
+    data-i="{{index}}"
+    bindtap="onTap"
+  >
+    <image class="ico" src="{{selected === index ? item.green : item.gray}}" />
+    <text>{{item.text}}</text>
+  </view>
+</view>

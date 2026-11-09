@@ -1,0 +1,17 @@
+# 微信开发者工具本地私有配置
+project.private.config.json
+
+# 依赖与构建产物
+node_modules/
+miniprogram_npm/
+*.log
+
+# 自动化验证的本地缓存
+.verify/node_modules/
+
+# 生成图的中间产物（正式图标在 assets/）
+vibe_images/
+
+# 系统杂物
+.DS_Store
+Thumbs.db

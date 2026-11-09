@@ -1,0 +1,55 @@
+.head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fff;
+  padding: 16rpx 24rpx 0;
+}
+
+.tabs { display: flex; gap: 40rpx; }
+
+.tab {
+  font-size: 30rpx;
+  color: #666;
+  padding-bottom: 18rpx;
+  position: relative;
+}
+
+.tab.on { color: #1a1a1a; font-weight: 600; }
+
+.tab.on::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8rpx;
+  width: 44rpx;
+  height: 6rpx;
+  border-radius: 4rpx;
+  background: #07C160;
+}
+
+.feed { padding: 24rpx; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  margin-bottom: 16rpx;
+}
+
+.rk { width: 52rpx; flex-shrink: 0; text-align: center; font-size: 30rpx; font-weight: 800; color: #c5c5c5; }
+.rk.top { color: #f7b500; }
+.mi { width: 40rpx; height: 40rpx; }
+.logo {
+  width: 68rpx; height: 68rpx; border-radius: 16rpx; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 32rpx;
+}
+.body { flex: 1; min-width: 0; }
+.rt { font-size: 28rpx; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rs { font-size: 22rpx; color: #999; margin-top: 6rpx; }
+.grow { font-size: 22rpx; color: #07C160; flex-shrink: 0; text-align: right; line-height: 1.5; white-space: pre-line; }

@@ -1,0 +1,74 @@
+.wrap { padding: 24rpx 24rpx 160rpx; }
+
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.head { display: flex; align-items: center; gap: 16rpx; margin-bottom: 20rpx; }
+.avatar {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 26rpx; font-weight: 600; flex-shrink: 0;
+}
+.avatar.sm { width: 56rpx; height: 56rpx; font-size: 22rpx; }
+.who { flex: 1; min-width: 0; }
+.nick { font-size: 28rpx; font-weight: 500; }
+.time { font-size: 22rpx; color: #999; margin-top: 2rpx; }
+.chan-badge { font-size: 20rpx; color: #07C160; background: #e8f9ef; border-radius: 8rpx; padding: 4rpx 12rpx; }
+.chan-badge.hot { color: #e6573c; background: #fdeee9; }
+.chan-badge.vibe { color: #5b6ef5; background: #eceffb; }
+
+.title { font-size: 38rpx; font-weight: 600; line-height: 1.4; margin-bottom: 16rpx; }
+.tags { display: flex; flex-wrap: wrap; gap: 12rpx; }
+.tag { font-size: 22rpx; color: #07C160; background: #e8f9ef; border-radius: 8rpx; padding: 6rpx 16rpx; }
+.body { font-size: 30rpx; color: #333; line-height: 1.85; margin-top: 28rpx; white-space: pre-wrap; }
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 24rpx;
+  padding: 18rpx 22rpx;
+  background: #F7F8FA;
+  border-radius: 12rpx;
+}
+.li { width: 32rpx; height: 32rpx; flex-shrink: 0; }
+.ltxt { flex: 1; font-size: 26rpx; color: #07C160; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.lcopy { font-size: 24rpx; color: #999; flex-shrink: 0; }
+
+.cm-title { font-size: 28rpx; font-weight: 600; margin-bottom: 8rpx; }
+.cm { display: flex; gap: 16rpx; padding: 20rpx 0; border-bottom: 1rpx solid #EDEDED; }
+.cm:last-child { border-bottom: none; }
+.cbody { flex: 1; }
+.cnick { font-size: 24rpx; color: #999; }
+.ctext { font-size: 28rpx; margin-top: 6rpx; line-height: 1.55; }
+
+.foot {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  background: #fff;
+  border-top: 1rpx solid #d9d9d9;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 16rpx 28rpx calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.inp {
+  flex: 1;
+  height: 72rpx;
+  background: #F2F2F2;
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 28rpx;
+  font-size: 26rpx;
+  color: #c5c5c5;
+}
+
+.fact { display: flex; flex-direction: column; align-items: center; font-size: 20rpx; color: #999; min-width: 68rpx; }
+.fact.on { color: #FA5151; }
+.fi { width: 40rpx; height: 40rpx; }

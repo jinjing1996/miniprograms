@@ -1,0 +1,44 @@
+<view class="wrap">
+  <view class="card">
+    <view class="head">
+      <image wx:if="{{avatarUrl}}" class="avatar img" src="{{avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar" style="background:{{avatarBg}}">{{post.author[0]}}</view>
+      <view class="who">
+        <view class="nick">{{post.author}}</view>
+        <view class="time">{{post.hours}} 小时前 · 阅读 {{post.views}}</view>
+      </view>
+      <view class="chan-badge {{badge}}">{{post.ch}}</view>
+    </view>
+    <view class="title">{{post.title}}</view>
+    <view class="tags">
+      <text wx:for="{{post.tags}}" wx:key="*this" class="tag g">#{{item}}</text>
+    </view>
+    <view wx:if="{{post.link}}" class="link" bindtap="onCopyLink">
+      <image class="li" src="{{linkIcon}}" />
+      <text class="ltxt">{{post.link}}</text>
+      <text class="lcopy">复制</text>
+    </view>
+    <view class="body">{{post.body}}</view>
+  </view>
+
+  <view class="card">
+    <view class="cm-title">评论 {{comments.length}}</view>
+    <view class="cm" wx:for="{{comments}}" wx:key="n">
+      <view class="avatar sm" style="background:{{item.bg}}">{{item.n[0]}}</view>
+      <view class="cbody">
+        <view class="cnick">{{item.n}}</view>
+        <view class="ctext">{{item.c}}</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="foot">
+  <view class="inp" bindtap="onComment">写下你的想法…</view>
+  <view class="fact {{liked ? 'on' : ''}}" bindtap="onLike">
+    <image class="fi" src="{{heart}}" /><text>{{post.likes}}</text>
+  </view>
+  <view class="fact {{fav ? 'on' : ''}}" bindtap="onFav">
+    <image class="fi" src="{{star}}" /><text>收藏</text>
+  </view>
+</view>

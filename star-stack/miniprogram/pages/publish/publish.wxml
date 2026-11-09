@@ -1,0 +1,31 @@
+<view class="wrap">
+  <view class="card">
+    <view class="label">选择板块</view>
+    <view class="picks">
+      <view
+        wx:for="{{channels}}"
+        wx:key="*this"
+        class="pick {{ch === item ? 'on' : ''}}"
+        data-c="{{item}}"
+        bindtap="onPick"
+      >{{item}}</view>
+    </view>
+  </view>
+  <view class="card">
+    <view class="label">标题</view>
+    <input class="input" placeholder="一句话说清你的主题" value="{{title}}" data-f="title" bindinput="onInput" />
+  </view>
+  <view class="card">
+    <view class="label">正文</view>
+    <textarea class="textarea" placeholder="分享你的开发经验、踩坑记录或好用的工具…" value="{{body}}" data-f="body" bindinput="onInput" maxlength="-1" />
+  </view>
+  <view class="card">
+    <view class="label">官网 / 项目地址（选填）</view>
+    <input class="input" placeholder="如：excalidraw.com" value="{{link}}" data-f="link" bindinput="onInput" />
+  </view>
+  <view class="card">
+    <view class="label">标签</view>
+    <input class="input" placeholder="用空格分隔，如：React 性能优化" value="{{tags}}" data-f="tags" bindinput="onInput" />
+  </view>
+  <button class="submit" bindtap="onSubmit">发布</button>
+</view>

@@ -1,0 +1,31 @@
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-top: 1rpx solid #d9d9d9;
+  display: flex;
+  padding-bottom: env(safe-area-inset-bottom);
+  height: 110rpx;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  font-size: 20rpx;
+  color: #999;
+}
+
+.tab.on {
+  color: #07C160;
+}
+
+.ico {
+  width: 44rpx;
+  height: 44rpx;
+}

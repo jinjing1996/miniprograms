@@ -1,0 +1,26 @@
+<view class="head">
+  <view class="search" bindtap="onSearch">
+    <image class="si" src="{{searchIcon}}" /><text>搜索项目、工具、经验</text>
+  </view>
+  <scroll-view class="tabs" scroll-x="{{true}}">
+    <view
+      wx:for="{{channels}}"
+      wx:key="*this"
+      class="tab {{channel === item ? 'on' : ''}}"
+      data-c="{{item}}"
+      bindtap="onTab"
+    >{{item}}</view>
+  </scroll-view>
+</view>
+
+<view class="feed">
+  <post-card wx:for="{{list}}" wx:key="_id" post="{{item}}" bind:like="onLike" />
+</view>
+
+<view wx:if="{{err}}" class="fail">
+  <view class="fail-msg">加载失败：{{err}}</view>
+  <view class="fail-btn" bindtap="onRetry">重试</view>
+</view>
+
+<view wx:if="{{loadingMore}}" class="end">加载中…</view>
+<view wx:elif="{{noMore && list.length}}" class="end">没有更多了</view>

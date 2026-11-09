@@ -1,0 +1,27 @@
+<view class="head">
+  <view class="tabs">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="*this"
+      class="tab {{tab === item ? 'on' : ''}}"
+      data-t="{{item}}"
+      bindtap="onTab"
+    >{{item}}</view>
+  </view>
+</view>
+
+<view class="feed">
+  <view class="row" wx:for="{{rows}}" wx:key="id" data-id="{{item.id}}" bindtap="onTap">
+    <view class="rk {{item.top ? 'top' : ''}}">
+      <image wx:if="{{item.top}}" class="mi" src="{{tab === '工具热度榜' ? toolIcon : trophyIcon}}" />
+      <text wx:else>{{item.rank}}</text>
+    </view>
+    <image wx:if="{{item.avatar}}" class="logo" src="{{item.avatar}}" mode="aspectFill" />
+    <view wx:elif="{{item.logo}}" class="logo" style="background:{{item.bg}}">{{item.logo}}</view>
+    <view class="body">
+      <view class="rt">{{item.title}}</view>
+      <view class="rs">{{item.sub}}</view>
+    </view>
+    <view class="grow">{{item.tail}}</view>
+  </view>
+</view>

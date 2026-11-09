@@ -1,0 +1,771 @@
+{
+ "posts": [
+  {
+   "id": 1,
+   "ch": "热门项目",
+   "title": "Raycast — 取代 Spotlight 的效率启动器",
+   "desc": "基于插件生态的 macOS 快捷工具，开发者聚集度极高，插件市场年增速 300%。适合学习其插件架构与跨端设计。",
+   "tags": [
+    "macOS",
+    "插件架构",
+    "TypeScript"
+   ],
+   "stars": "78.2k",
+   "weekly": "+2.1k",
+   "link": "raycast.com",
+   "likes": 1240,
+   "views": 8900,
+   "author": "阿星",
+   "hours": 3,
+   "liked": false,
+   "body": "推荐理由：\n\n1. 插件体系设计优雅，开发者贡献成本极低；\n2. 从 0 到 1 的品类创新：把启动器做成平台；\n3. 前端团队公开了大量工程实践分享。\n\n可借鉴点：本地优先 + 云同步的架构、以开发者为核心的增长飞轮。"
+  },
+  {
+   "id": 2,
+   "ch": "热门项目",
+   "title": "Zod v4 发布：性能提升 5 倍，体积减半",
+   "desc": "TypeScript 首选校验库大版本更新，全新协议系统，值得关注生态迁移成本。",
+   "tags": [
+    "TypeScript",
+    "开源",
+    "v4"
+   ],
+   "stars": "35.6k",
+   "weekly": "+1.5k",
+   "link": "github.com/colinhacks/zod",
+   "likes": 890,
+   "views": 5400,
+   "author": "小林",
+   "hours": 6,
+   "liked": false,
+   "body": "升级要点：\n\n- 核心重写，解析性能提升约 5x；\n- 新增微型语法 z.hex()、z.uuid() 等；\n- 与 JSON Schema 双向互转。\n\n迁移建议：先用 codemod 扫一遍，再重点测试 error map 相关逻辑。"
+  },
+  {
+   "id": 3,
+   "ch": "热门项目",
+   "title": "Ollama：本地跑大模型只需要一行命令",
+   "desc": "把 llama.cpp 封装成开发者体验极佳的本地模型服务，一周增长 2k star。",
+   "tags": [
+    "LLM",
+    "本地部署",
+    "Go"
+   ],
+   "stars": "112k",
+   "weekly": "+2.8k",
+   "link": "github.com/ollama/ollama",
+   "likes": 2100,
+   "views": 15000,
+   "author": "Kevin",
+   "hours": 9,
+   "liked": false,
+   "body": "为什么火：\n\n- 极低门槛：curl 安装 + ollama run 即跑；\n- REST API 让本地模型秒接应用；\n- Modelfile 让微调像写 Dockerfile。\n\n搭建个人 AI 助手项目的推荐组合：Ollama + Open WebUI。"
+  },
+  {
+   "id": 4,
+   "ch": "工具网站",
+   "title": "Excalidraw — 手绘风白板，画架构图比 PPT 快 10 倍",
+   "desc": "开源免费的在线白板，手绘风格天然适合技术方案、架构图和脑暴，支持实时协作，免注册即用。",
+   "tags": [
+    "白板",
+    "架构图",
+    "开源"
+   ],
+   "link": "excalidraw.com",
+   "likes": 1830,
+   "views": 9600,
+   "author": "阿星",
+   "hours": 2,
+   "liked": false,
+   "body": "网站：excalidraw.com\n\n使用场景：\n\n- 写技术方案时画系统架构图，比 PPT 形状快太多；\n- 团队协作脑暴：发个链接多人同画；\n- 嵌进 README：导出 .excalidraw 文件可二次编辑。\n\n小技巧：按住 Alt 复制拖动，Library 里有现成的 AWS/K8s 图标库。"
+  },
+  {
+   "id": 5,
+   "ch": "工具网站",
+   "title": "Photopea — 浏览器里的免费 Photoshop",
+   "desc": "打开即用的在线图片编辑器，界面和快捷键几乎复刻 PS，支持 PSD/AI/Sketch 文件，应急改图神器。",
+   "tags": [
+    "图片编辑",
+    "在线工具",
+    "免费"
+   ],
+   "link": "photopea.com",
+   "likes": 940,
+   "views": 5200,
+   "author": "Momo",
+   "hours": 5,
+   "liked": false,
+   "body": "网站：photopea.com\n\n为什么推荐：\n\n- 完全免费，无需安装，网页打开即用；\n- 直接打开 PSD / AI / Sketch / XD 文件；\n- 快捷键与 PS 基本一致，零学习成本。\n\n适合场景：临时改设计稿、抠图、切图导出，不用再为一张图开一个 PS。"
+  },
+  {
+   "id": 6,
+   "ch": "工具网站",
+   "title": "TinyPNG + Squoosh 组合：图片资源压缩流水线",
+   "desc": "TinyPNG 批量有损压缩肉眼无感，Squoosh 精细调参，两步把首页图片体积砍掉 70%。",
+   "tags": [
+    "图片压缩",
+    "性能优化"
+   ],
+   "link": "tinypng.com",
+   "likes": 710,
+   "views": 4300,
+   "author": "Yumi",
+   "hours": 8,
+   "liked": false,
+   "body": "网站：tinypng.com / squoosh.app\n\n我的压缩流水线：\n\n1. TinyPNG 批量过一遍（WebP 格式顺手转掉）；\n2. 首屏大图再用 Squoosh 手动调 AVIF 质量到 60-75；\n3. CI 里加 size-limit 卡住回退。\n\n实测：活动页从 4.2MB 降到 1.1MB，LCP 提升 1.3s。"
+  },
+  {
+   "id": 7,
+   "ch": "经验分享",
+   "title": "我把重构老项目的流程总结成了这 5 步",
+   "desc": "接手 8 年老项目不敢动？先补测试、再抽边界、小步替换。这套流程帮我们把构建时间从 4min 降到 40s。",
+   "tags": [
+    "重构",
+    "工程化"
+   ],
+   "likes": 672,
+   "views": 4100,
+   "author": "老周",
+   "hours": 12,
+   "liked": false,
+   "body": "五步法：\n\n1. 冻结：先给核心链路补快照测试；\n2. 划线：圈出模块边界，禁止新增跨层调用；\n3. 替换：新功能一律走新架构；\n4. 搬运：按用例逐块搬迁旧代码；\n5. 删除：旧路径流量归零后果断删掉。\n\n关键是第 5 步——很多团队只拆不删，最后两套并存。"
+  },
+  {
+   "id": 8,
+   "ch": "经验分享",
+   "title": "上线后被 PM 追问的埋点事故复盘",
+   "desc": "一次字段改名导致 3 天数据全丢。分享我们的埋点契约化方案：Schema 注册 + CI 校验。",
+   "tags": [
+    "复盘",
+    "数据埋点"
+   ],
+   "likes": 445,
+   "views": 3200,
+   "author": "Momo",
+   "hours": 15,
+   "liked": false,
+   "body": "事故链：开发改了事件字段名 → 数据侧无感知 → 报表口径断裂 3 天。\n\n修复方案：\n- 所有埋点进 schema 仓库注册；\n- CI 阶段 diff 校验，破坏性改名直接 block；\n- 上线前自动比对线上/预发事件结构。\n\n教训：埋点是接口，不是日志。"
+  },
+  {
+   "id": 9,
+   "ch": "经验分享",
+   "title": "远程协作两年，我沉淀的 6 条异步沟通原则",
+   "desc": "能写文档不开会；会议只用来做决定。异步写作的清晰度决定团队速度。",
+   "tags": [
+    "远程办公",
+    "协作"
+   ],
+   "likes": 531,
+   "views": 3900,
+   "author": "Yumi",
+   "hours": 18,
+   "liked": false,
+   "body": "6 条原则：\n\n1. 先给结论，再给背景；\n2. 需要回复的，写清 deadline；\n3. 文档优于聊天记录；\n4. 会议必须有 decision log；\n5. 时区重叠 3 小时是黄金协作期；\n6. 「在吗」= 直接说事。"
+  },
+  {
+   "id": 10,
+   "ch": "经验分享",
+   "title": "用 Claude Code 两天 Vibe 出一个可用小程序的全流程",
+   "desc": "从提示词分层、上下文管理到真机联调，关键是先让它写 spec 再写代码。",
+   "tags": [
+    "Claude Code",
+    "工作流",
+    "VibeCoding"
+   ],
+   "likes": 1580,
+   "views": 11200,
+   "author": "阿星",
+   "hours": 21,
+   "liked": false,
+   "body": "我的流程：\n\n1. 一句话需求 → 让它反问我 10 个问题补全需求；\n2. 生成 spec.md 并人工修订（这步最值钱）；\n3. 按 spec 拆 task list，一次只做一个任务；\n4. 每个任务完成就跑测试，红了马上修；\n5. 提交前让它自审一遍 diff。\n\n心得：Vibe 不是放任，是把「写」的活交出去，把「想」的活留下。"
+  },
+  {
+   "id": 11,
+   "ch": "经验分享",
+   "title": "Prompt 里加这一句，AI 生成的代码 bug 少一半",
+   "desc": "「先写会失败的测试用例，再写实现」——TDD 提示词是让 AI 代码可靠的最便宜手段。",
+   "tags": [
+    "Prompt技巧",
+    "VibeCoding"
+   ],
+   "likes": 2210,
+   "views": 16800,
+   "author": "小林",
+   "hours": 24,
+   "liked": false,
+   "body": "对比实验：同一需求跑 20 次。\n\n- 直接要代码：一次通过率 45%；\n- 加上「先写失败测试，再实现，最后跑测试确认」：一次通过率 82%。\n\n原理：强制模型走验证回路，而不是单向生成。"
+  },
+  {
+   "id": 12,
+   "ch": "经验分享",
+   "title": "上下文爆了怎么办？大项目喂给 AI 的分层策略",
+   "desc": "AGENTS.md 当目录，模块文档当抽屉，永远不要让 AI 全仓检索。实测 token 消耗降 70%。",
+   "tags": [
+    "上下文管理",
+    "VibeCoding"
+   ],
+   "likes": 1120,
+   "views": 8700,
+   "author": "Kevin",
+   "hours": 27,
+   "liked": false,
+   "body": "三层投喂：\n\n1. 根级 AGENTS.md：项目地图 + 约定，几百 token；\n2. 模块级 README：接口、边界、坑；\n3. 任务级：只贴直接相关的文件。\n\n配合 grep 按需取码，效果远好于整目录塞入。"
+  },
+  {
+   "id": 13,
+   "ch": "热门项目",
+   "title": "PPT 大师 — 把 22 种 PPT 技能收进一条工作流",
+   "desc": "不是模板库，是带决策的出稿工作台：9 条路径覆盖竖屏演示、企业 PPTX、45 秒极速出稿。",
+   "tags": [
+    "AI生成PPT",
+    "AgentSkill",
+    "开源"
+   ],
+   "hours": 5,
+   "link": "github.com/woqianfu/ppt-master",
+   "likes": 46,
+   "views": 280,
+   "author": "阿星",
+   "body": "思路是把散落的 PPT 技能（排版、配图、讲稿）统一成一条可决策的流程：先问清用途，再选路径。\n\n输出格式覆盖 HTML / PPTX / PNG / PDF，演讲模式可以按 S 键看逐字稿。\n\n刚发布的新仓库，还看不到 star 数据，适合先本地跑一遍看效果。"
+  },
+  {
+   "id": 14,
+   "ch": "热门项目",
+   "title": "Ponytail — 让 AI 像最懒的资深工程师那样写代码",
+   "desc": "用「最懒资深工程师」人格约束 Agent：能少写就少写，先想清楚再动手，专治过度设计。",
+   "tags": [
+    "Claude Code",
+    "提示词",
+    "代码质量"
+   ],
+   "stars": "148.5k",
+   "likes": 3710,
+   "views": 22300,
+   "link": "github.com/DietrichGebert/ponytail",
+   "author": "小林",
+   "hours": 2,
+   "body": "核心观点：最好的代码是你根本没写的那段。技能会推着模型先评估「能不能不做 / 少做」，再决定实现。\n\n对 Cursor、Claude Code 这类带 rules 机制的工具体系，可以直接当全局规则挂上。\n\n官网：ponytail.dev"
+  },
+  {
+   "id": 15,
+   "ch": "热门项目",
+   "title": "CodeGraph — 先把仓库索引成知识图，再让 AI 读代码",
+   "desc": "预索引代码知识图，改动自动同步，全程本地；省 token 也省工具调用次数。",
+   "tags": [
+    "代码索引",
+    "上下文管理",
+    "本地部署"
+   ],
+   "stars": "72.4k",
+   "likes": 1810,
+   "views": 10900,
+   "link": "github.com/colbymchenry/codegraph",
+   "author": "Kevin",
+   "hours": 8,
+   "body": "解决的问题很实在：Agent 每次冷读大仓库都在浪费上下文。索引成图之后按需取子图，检索成本明显下降。\n\n适配面广（Claude Code / Codex / Cursor / Copilot 等），代码变更会自动增量同步。\n\n官网：colbymchenry.github.io/codegraph/"
+  },
+  {
+   "id": 16,
+   "ch": "热门项目",
+   "title": "Anthropic Skills — 官方 Agent 技能仓库",
+   "desc": "官方技能集合与写法示范，文档处理类技能可直接复用，也是学 Skill 机制的首选参考。",
+   "tags": [
+    "AgentSkill",
+    "官方",
+    "Claude"
+   ],
+   "stars": "179.1k",
+   "likes": 4480,
+   "views": 26900,
+   "link": "github.com/anthropics/skills",
+   "author": "阿星",
+   "hours": 1,
+   "body": "想搞清「技能到底是什么结构」，看这个仓库比看任何二手解读都快：目录约定、说明写法、加载方式都是官方口径。\n\n里面一批文档处理技能可以直接拿进自己的 Agent。\n\n建议当模板库读，而不是当依赖装。"
+  },
+  {
+   "id": 17,
+   "ch": "热门项目",
+   "title": "Emil Kowalski Skills — 设计师和前端都能直接用的技能包",
+   "desc": "偏动效与界面细节的技能集，作者本身是多款热门动效库的维护者，适合补齐审美术语。",
+   "tags": [
+    "UI动效",
+    "前端",
+    "AgentSkill"
+   ],
+   "stars": "42.2k",
+   "likes": 1060,
+   "views": 6300,
+   "link": "github.com/emilkowalski/skills",
+   "author": "Yumi",
+   "hours": 14,
+   "body": "价值在于把「什么叫好的动效」写成模型能执行的条款：时长、缓动、触发时机的取舍都有依据。\n\n纯 Markdown，读起来成本低，可以只摘几条并进你自己的规则文件。\n\n官网：emilkowal.ski/skill"
+  },
+  {
+   "id": 18,
+   "ch": "热门项目",
+   "title": "Impeccable — 给 AI 一套设计规范语言",
+   "desc": "用设计语言约束模型产出，让界面组件更像被设计过，而不是随机拼贴。",
+   "tags": [
+    "设计规范",
+    "前端",
+    "AgentSkill"
+   ],
+   "stars": "72.8k",
+   "likes": 1820,
+   "views": 10900,
+   "link": "github.com/pbakaus/impeccable",
+   "author": "Momo",
+   "hours": 6,
+   "body": "定位是「AI 编码环境里的设计层」：把间距、层级、一致性的判断标准显式化，减少一次性生成物的拼贴感。\n\n适合配合组件库使用，先约束规范再谈风格。\n\n官网：impeccable.style"
+  },
+  {
+   "id": 19,
+   "ch": "热门项目",
+   "title": "Taste Skill — 给 AI 加审美，压制模板味",
+   "desc": "针对「AI 一眼假」的产出问题，用审美规则拦住平庸排版与配色，让页面更敢有风格。",
+   "tags": [
+    "审美",
+    "前端",
+    "VibeCoding"
+   ],
+   "stars": "91.4k",
+   "likes": 2290,
+   "views": 13700,
+   "link": "github.com/Leonxlnx/taste-skill",
+   "author": "阿星",
+   "hours": 3,
+   "body": "和创意方向类技能是一组：Impeccable 管规范，Taste 管口味，两者叠加能显著减少「默认紫色渐变」式产出。\n\n可以当反向清单用——它明确写了哪些做法算平庸。\n\n官网：tasteskill.dev"
+  },
+  {
+   "id": 20,
+   "ch": "热门项目",
+   "title": "UI/UX Pro Max — 自带设计知识库的技能",
+   "desc": "内置设计模式与最佳实践参考，跨端产出专业 UI/UX，适合从零起页面的场景。",
+   "tags": [
+    "设计知识库",
+    "UI/UX",
+    "AgentSkill"
+   ],
+   "stars": "131.8k",
+   "likes": 3300,
+   "views": 19800,
+   "link": "github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+   "author": "小林",
+   "hours": 10,
+   "body": "和前面几个的差异：它更像查得到东西的设计数据库，而不只是一组风格约束。\n\n设计智能 + 创意方向两类需求同时存在时，用它做参考底座、用其它技能做落地约束比较顺手。\n\n官网：uupm.cc"
+  },
+  {
+   "id": 21,
+   "ch": "热门项目",
+   "title": "Whisper — 可以自托管的多语种语音转文字",
+   "desc": "OpenAI 开源的语音识别模型，弱监督训练，长音频转写和翻译都能本地跑。",
+   "tags": [
+    "语音识别",
+    "开源模型",
+    "本地部署"
+   ],
+   "stars": "109.8k",
+   "likes": 2750,
+   "views": 16500,
+   "link": "github.com/openai/whisper",
+   "author": "Kevin",
+   "hours": 20,
+   "body": "做会议记录、播客字幕的首选：鲁棒性来自超大规模弱监督数据，噪声环境和口音的表现比同期方案稳。\n\n工程上常见搭配是 faster-whisper 做推理加速，或者用词级时间戳做字幕对齐。\n\n注意显存与模型尺寸的选择，中文长音频建议分块。"
+  },
+  {
+   "id": 22,
+   "ch": "热门项目",
+   "title": "ChatTTS — 为对话场景调好的开源语音合成",
+   "desc": "面向日常对话的生成式 TTS，中文停顿、语气词和笑声处理自然，适合有声内容。",
+   "tags": [
+    "TTS",
+    "中文语音",
+    "开源模型"
+   ],
+   "stars": "39.9k",
+   "likes": 1000,
+   "views": 6000,
+   "link": "github.com/2noise/ChatTTS",
+   "author": "老周",
+   "hours": 26,
+   "body": "强项是对话感：会自己加停顿和语气，不像传统 TTS 那样平铺直叙，做数字人、有声书片段很合适。\n\n中文/英文混读表现不错，其他语言社区有实验版本。\n\n官网：2noise.com"
+  },
+  {
+   "id": 23,
+   "ch": "热门项目",
+   "title": "GPT-SoVITS — 一分钟语料就能克隆音色",
+   "desc": "小样本语音克隆方案，几分钟录音即可微调出可用音色，社区工具链成熟。",
+   "tags": [
+    "语音克隆",
+    "TTS",
+    "微调"
+   ],
+   "stars": "62.3k",
+   "likes": 1560,
+   "views": 9400,
+   "link": "github.com/RVC-Boss/GPT-SoVITS",
+   "author": "Yumi",
+   "hours": 30,
+   "body": "门槛是它最大的卖点：少样本甚至零样本推理就能出接近本人音色的结果，训练流程有现成 WebUI。\n\n配套的数据清洗、音轨分离、RVC 相关工具链齐全，个人配音项目基本可以一站搞定。\n\n商用前请确认授权与录音人同意。"
+  },
+  {
+   "id": 24,
+   "ch": "热门项目",
+   "title": "Browser Use — 让 Agent 直接替你操作浏览器",
+   "desc": "把网页结构交给模型的浏览器智能体框架，表单填写、信息采集类自动化最顺手。",
+   "tags": [
+    "BrowserAgent",
+    "自动化",
+    "Python"
+   ],
+   "stars": "116.8k",
+   "likes": 2920,
+   "views": 17500,
+   "link": "github.com/browser-use/browser-use",
+   "author": "阿星",
+   "hours": 4,
+   "body": "适合「步骤描述清楚但没 API」的网页任务：订会议室、批量填单、跨站比对价格。\n\n实践建议：先在小范围站点跑通，把任务拆细并给出明确完成判据，失败率会下降很多。\n\n官网：browser-use.com"
+  },
+  {
+   "id": 25,
+   "ch": "热门项目",
+   "title": "Playwright — 跨浏览器自动化的事实标准",
+   "desc": "一套 API 驱动 Chromium / WebKit / Firefox，等待机制稳，测试和抓取都能用。",
+   "tags": [
+    "E2E测试",
+    "自动化",
+    "TypeScript"
+   ],
+   "stars": "96.9k",
+   "likes": 2420,
+   "views": 14500,
+   "link": "github.com/microsoft/playwright",
+   "author": "老周",
+   "hours": 34,
+   "body": "比前辈们省心的地方是自动等待与隔离上下文，用例不再靠 sleep 续命；codegen 和 trace viewer 对排查特别有用。\n\n很多 Browser Agent 框架底层就是它，值得先掌握原生用法再接智能体。\n\n官网：playwright.dev"
+  },
+  {
+   "id": 26,
+   "ch": "热门项目",
+   "title": "Browser Act — 为 AI Agent 做的浏览器自动化 CLI",
+   "desc": "命令行驱动的浏览器技能：反爬突破、卡住时人工接管、多任务并行与多会话隔离。",
+   "tags": [
+    "BrowserAgent",
+    "CLI",
+    "反爬"
+   ],
+   "stars": "6.0k",
+   "likes": 150,
+   "views": 900,
+   "link": "github.com/browser-act/skills/tree/main/browser-act",
+   "author": "Momo",
+   "hours": 18,
+   "body": "定位是把浏览器能力做成 CLI 技能，方便直接挂进 Claude 类命令行工具，不用另起服务。\n\n亮点在多会话独立执行和跨平台人工接管，处理登录墙时比纯自动更稳。\n\n官网：browseract.com"
+  },
+  {
+   "id": 27,
+   "ch": "热门项目",
+   "title": "Computer Use MCP — 让 Agent 看见并操作 Windows 桌面",
+   "desc": "本地 MCP 服务：截图 + UI Automation + 键鼠共 40 个确定性工具，不调模型也不用 OCR。",
+   "tags": [
+    "MCP",
+    "桌面自动化",
+    "Windows"
+   ],
+   "stars": "",
+   "likes": 30,
+   "views": 190,
+   "link": "github.com/cenglin123/computer-use-mcp",
+   "author": "Kevin",
+   "hours": 9,
+   "body": "思路是把「操作桌面」拆成确定性的原子工具，模型只负责决定调用哪个，不负责识别像素，稳定性比视觉方案好。\n\n走的是 Windows UI Automation 接口，所以控件名、状态这些能直接拿到。\n\n刚发布，仓库还没起量，适合拿去接自己的桌面自动化需求。"
+  },
+  {
+   "id": 28,
+   "ch": "热门项目",
+   "title": "Prompt Optimizer — 给提示词跑一遍优化回路",
+   "desc": "对已有提示词做结构化改写与多模型对比测试，网页版开箱即用，也支持本地部署。",
+   "tags": [
+    "Prompt技巧",
+    "工具",
+    "LLM"
+   ],
+   "stars": "36.0k",
+   "likes": 900,
+   "views": 5400,
+   "link": "github.com/linshenkx/prompt-optimizer",
+   "author": "小林",
+   "hours": 12,
+   "body": "不是「帮你重写提示词」这么简单：它会把优化方向拆成可选项，再让你在同一批用例上对比新旧版本效果。\n\n写 Agent 系统提示词时特别好用，能明显看出哪一条约束在起作用。\n\n官网：prompt.always200.com"
+  },
+  {
+   "id": 29,
+   "ch": "热门项目",
+   "title": "PaddleOCR — 中文文档识别的老牌方案",
+   "desc": "从图片和 PDF 里取结构化文本，版面解析与关键信息抽取齐全，中文场景表现稳。",
+   "tags": [
+    "OCR",
+    "文档解析",
+    "中文"
+   ],
+   "stars": "90.4k",
+   "likes": 2260,
+   "views": 13600,
+   "link": "github.com/PaddlePaddle/PaddleOCR",
+   "author": "老周",
+   "hours": 40,
+   "body": "中文识别这条赛道上它仍是默认选项之一：模型小、推理快，表格与版面方向也有配套能力。\n\n新版把「文档转结构化数据」做成主线，做票据、证照、扫描件入库时省很多胶水代码。\n\n官网：paddleocr.com"
+  },
+  {
+   "id": 30,
+   "ch": "热门项目",
+   "title": "MinerU — 把复杂 PDF 转成大模型能吃的 Markdown",
+   "desc": "专治论文、教材、图文混排文档的解析，公式和表格保留度高，喂 RAG 之前很省事。",
+   "tags": [
+    "文档解析",
+    "RAG",
+    "数据准备"
+   ],
+   "stars": "80.9k",
+   "likes": 2020,
+   "views": 12100,
+   "link": "github.com/opendatalab/MinerU",
+   "author": "Yumi",
+   "hours": 22,
+   "body": "RAG 项目里最脏的活是数据准备，它把这篇脏活做了：去页眉页脚、还原阅读顺序、公式转 LaTeX、表格转结构化。\n\n论文和扫描教材效果明显好于普通 PDF 提取库。\n\n文档：opendatalab.github.io/MinerU/"
+  },
+  {
+   "id": 31,
+   "ch": "热门项目",
+   "title": "Codex Dream Skin — 给 Codex 客户端换层皮肤",
+   "desc": "主题皮肤项目，把官方客户端界面换成可定制视觉风格，配置即换，不改功能。",
+   "tags": [
+    "主题",
+    "开发者工具",
+    "JavaScript"
+   ],
+   "stars": "14.9k",
+   "likes": 370,
+   "views": 2200,
+   "link": "github.com/Fei-Away/Codex-Dream-Skin",
+   "author": "Momo",
+   "hours": 46,
+   "body": "纯前端层面的定制：配色、背景、字体这些观感项，不动客户端逻辑。\n\n天天盯着同一个界面的人，换个顺眼的皮肤确实是效率小事。\n\n官网：dreamskin.cc"
+  },
+  {
+   "id": 32,
+   "ch": "热门项目",
+   "title": "Agency Agents — 一整套可插拔的 Agent 角色库",
+   "desc": "从前端工程师到社区运营，几十个带流程和产出标准的角色 Agent，直接拼虚拟团队。",
+   "tags": [
+    "AgentSkill",
+    "角色库",
+    "工作流"
+   ],
+   "stars": "155.4k",
+   "likes": 3890,
+   "views": 23300,
+   "link": "github.com/msitarzewski/agency-agents",
+   "author": "阿星",
+   "hours": 7,
+   "body": "每个角色都写清了职责、流程和交付标准，不是只给一句人格描述，拿来做多角色协作的起点很合适。\n\n建议按需摘取，而不是整套装：角色一多，上下文和调度成本会压过收益。"
+  },
+  {
+   "id": 33,
+   "ch": "热门项目",
+   "title": "Scrapling — 会自适应页面变化的抓取框架",
+   "desc": "站点改版后自动重新定位元素，内置反爬规避与隐身模式，省去天天修选择器。",
+   "tags": [
+    "爬虫",
+    "反爬",
+    "Python"
+   ],
+   "stars": "84.6k",
+   "likes": 2110,
+   "views": 12700,
+   "link": "github.com/D4Vinci/Scrapling",
+   "author": "Kevin",
+   "hours": 16,
+   "body": "卖点是维护成本：选择器随页面结构自动迁移，抓取脚本不会一夜全挂。\n\n从单页请求到完整爬虫链路都有现成接口，需要时再开 stealth 模式。\n\n文档：scrapling.readthedocs.io"
+  },
+  {
+   "id": 34,
+   "ch": "热门项目",
+   "title": "LangChain — 大模型应用的通用底座",
+   "desc": "模型、工具、记忆、检索的抽象都在这里，生态最广，适合先拼出原型再逐步替换。",
+   "tags": [
+    "大模型编排",
+    "Python",
+    "Agent"
+   ],
+   "stars": "147.3k",
+   "likes": 3680,
+   "views": 22100,
+   "link": "github.com/langchain-ai/langchain",
+   "author": "老周",
+   "hours": 11,
+   "body": "Python 侧接大模型绕不开它：组件全、示例多、各家模型的适配层现成。\n\n选型建议：原型期用它的抽象提速，规模变大后按需替换掉不需要的层次，别为了框架而框架。\n\n文档：docs.langchain.com"
+  },
+  {
+   "id": 35,
+   "ch": "热门项目",
+   "title": "LangGraph — 用图结构写可控的 Agent 流程",
+   "desc": "把 Agent 步骤显式画成状态图，支持分支、循环和人工介入，长流程比裸链好调试。",
+   "tags": [
+    "大模型编排",
+    "工作流",
+    "Agent"
+   ],
+   "stars": "42.5k",
+   "likes": 1060,
+   "views": 6400,
+   "link": "github.com/langchain-ai/langgraph",
+   "author": "小林",
+   "hours": 28,
+   "body": "解决的是「智能体不可控」：状态、转移、检查点都在图上，出错能回放，也能中途插人工审核。\n\n流程一旦超过三五步，用它比线性链收益明显。\n\n文档：docs.langchain.com/oss/python/langgraph/"
+  },
+  {
+   "id": 36,
+   "ch": "热门项目",
+   "title": "LlamaIndex — 面向文档与检索的数据层",
+   "desc": "索引、切块、检索、重排一整套 RAG 组件，接私有知识库比自建管线省事。",
+   "tags": [
+    "RAG",
+    "文档索引",
+    "Python"
+   ],
+   "stars": "52.4k",
+   "likes": 1310,
+   "views": 7900,
+   "link": "github.com/run-llama/llama_index",
+   "author": "Yumi",
+   "hours": 36,
+   "body": "重心在数据而不是对话：文档加载、切块策略、向量检索与组合索引这些环节做得最细。\n\n做企业知识库问答时通常的组合是它管检索、LangChain 或自写代码管编排。\n\n文档：developers.llamaindex.ai"
+  },
+  {
+   "id": 37,
+   "ch": "热门项目",
+   "title": "LiteLLM — 一个接口调上百家模型",
+   "desc": "用 OpenAI 协议统一适配多家厂商，自带预算、限流和调用日志，换模型只改配置。",
+   "tags": [
+    "AI网关",
+    "多模型",
+    "运维"
+   ],
+   "stars": "59.9k",
+   "likes": 1500,
+   "views": 9000,
+   "link": "github.com/BerriAI/litellm",
+   "author": "老周",
+   "hours": 24,
+   "body": "接第三方模型时最痛的是每家协议和错误码都不一样，它把这些抹平成一套 OpenAI 兼容接口。\n\n网关模式下还能做成本归集、限流与故障转移，团队共用时很实用。\n\n文档：docs.litellm.ai"
+  },
+  {
+   "id": 38,
+   "ch": "热门项目",
+   "title": "Instructor — 让大模型按 Pydantic 模型输出",
+   "desc": "用类型定义约束结构化输出，校验不过自动重试，Python 里做信息抽取的常见选择。",
+   "tags": [
+    "结构化输出",
+    "Pydantic",
+    "Python"
+   ],
+   "stars": "0.3k",
+   "likes": 8,
+   "views": 60,
+   "link": "github.com/instructor-ai/instructor",
+   "author": "Momo",
+   "hours": 52,
+   "body": "思路很简单也很有效：把期望的输出写成 Pydantic 模型，让模型对着 schema 输出并自动纠错重试。\n\n做批量抽取、把非结构化文本转入库结构时比手解 JSON 稳得多。\n\n注：这个 org 下的镜像仓库星标很少，找上游时按项目名搜索更准。"
+  },
+  {
+   "id": 39,
+   "ch": "热门项目",
+   "title": "Spring AI — Java 生态的大模型应用框架",
+   "desc": "沿用 Spring 的配置与抽象方式接模型、向量库和工具调用，企业 Java 服务落地成本低。",
+   "tags": [
+    "Java",
+    "大模型编排",
+    "Spring"
+   ],
+   "stars": "9.5k",
+   "likes": 240,
+   "views": 1400,
+   "link": "github.com/spring-projects/spring-ai",
+   "author": "阿星",
+   "hours": 44,
+   "body": "给已有 Spring Boot 团队的路线：模型客户端、Embedding、向量存储都用熟悉的抽象和自动配置接进来。\n\n不用为了大模型单独维护一层 HTTP 封装，事务、配置、监控体系都能沿用。\n\n文档：spring.io/projects/spring-ai"
+  },
+  {
+   "id": 40,
+   "ch": "热门项目",
+   "title": "LangChain4j — LangChain 的 Java 实现",
+   "desc": "提供模型客户端、检索增强与 Agent 能力，适合 Java 栈但想快速接大模型的团队。",
+   "tags": [
+    "Java",
+    "大模型编排",
+    "RAG"
+   ],
+   "stars": "13.2k",
+   "likes": 330,
+   "views": 2000,
+   "link": "github.com/langchain4j/langchain4j",
+   "author": "Kevin",
+   "hours": 56,
+   "body": "覆盖面比 Spring AI 更接近 LangChain：模型、工具、记忆、RAG 都有独立抽象，可脱离 Spring 使用。\n\nJava 项目里做多模型路由和知识库检索时，它和 Spring AI 是两个主要候选，可以按是否强绑定 Spring 来选。"
+  },
+  {
+   "id": 41,
+   "ch": "热门项目",
+   "title": "HowToLiveBetter — 671 条按性价比排好的生活决策",
+   "desc": "长寿防病、急救、理财、法律红线、医保社保全写成条目，每条标成本、收益和证据等级，只引期刊论文与官方文件。",
+   "tags": [
+    "生活指南",
+    "证据分级",
+    "开源书籍",
+    "AgentSkill"
+   ],
+   "stars": "51.3k",
+   "likes": 1280,
+   "views": 7700,
+   "link": "github.com/eternity4719/HowToLiveBetter",
+   "author": "阿星",
+   "hours": 1,
+   "body": "一本「高性价比人生指南」：671 条建议覆盖长寿防病、急救、省钱理财、法律红线、失业工伤、医保社保、恋爱婚育、出国与学手艺，法律和医保社保这类制度内容按中国大陆现行规定写。\n\n每条都写明花掉什么、换回什么、证据有多硬，来源只引期刊论文和官方文件（A 级 438 条、B 级 178 条、C 级 55 条，附 1698 条原始链接）。作者反复强调这是按性价比排好的备选单，不是任务清单。\n\n对开发者最有用的其实是它自带的 skill：支持 Claude Code 和 Codex，装上后问「替朋友担保签不签」，它会先查书里的条目再回答，并注明出自第几节第几条——把一本静态知识库接进 Agent 的现成范式。\n\n提供在线检索页和 PDF / EPUB / 离线单文件 HTML 三种下载，另有英俄西葡越等社区翻译，以及小程序、iOS、打勾清单站等衍生版本。作者明确声明从未也不会发行任何代币。\n\n官网：eternity4719.github.io/HowToLiveBetter/"
+  },
+  {
+   "id": 42,
+   "ch": "热门项目",
+   "title": "awesome-design-md — 73 个知名网站的现成设计系统文件",
+   "desc": "把 Claude、Cursor、Raycast 等网站的配色、字阶与组件规则写成 DESIGN.md，放进项目根目录让 AI 生成风格一致的 UI。",
+   "tags": [
+    "设计系统",
+    "AI前端",
+    "DESIGN.md",
+    "AwesomeList"
+   ],
+   "stars": "120.0k",
+   "likes": 3000,
+   "views": 18000,
+   "link": "github.com/VoltAgent/awesome-design-md",
+   "author": "Momo",
+   "hours": 2,
+   "body": "DESIGN.md 是 Google Stitch 提出的新概念：一份纯文本的设计系统文档，AI Agent 读完就能生成风格一致的界面。它和 AGENTS.md 的分工很好记——AGENTS.md 管怎么搭，DESIGN.md 管长什么样。\n\n这个仓库把 73 个真实网站的设计规范扒成了现成文件，分成 AI 与 LLM 平台、开发工具与 IDE、后端数据库与 DevOps、效率 SaaS、设计创意工具、金融加密、电商零售、媒体与消费科技、汽车、复古网页十类。每份不只罗列色值，还写了分析出的版式规律、design token 和使用规则，目的是让模型别只学到表面。\n\n用法只有两步：把某个站点的 DESIGN.md 复制到项目根目录，然后告诉 Agent 按这个文件出页面。Markdown 是模型读得最顺的格式，不需要 Figma 导出、JSON schema 或额外工具链。\n\n背后是 VoltAgent 团队，配套的 getdesign.md 可以在线预览和取用任意一份，也能提交请求让它去扒指定网站（含只交付给你个人的私有请求）。MIT 许可，文件里的 token 均来自网站公开可见的 CSS 值。\n\n官网：getdesign.md/"
+  }
+ ],
+ "comments": {
+  "default": [
+   {
+    "n": "路人甲",
+    "c": "学到了，正好在手搓类似的东西"
+   },
+   {
+    "n": "DevZw",
+    "c": "第 3 点深有同感，我们团队踩过一模一样的坑"
+   },
+   {
+    "n": "小鱼",
+    "c": "有完整的 demo 仓库链接吗？"
+   }
+  ]
+ }
+}

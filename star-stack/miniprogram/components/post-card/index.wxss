@@ -1,0 +1,47 @@
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.head { display: flex; align-items: center; gap: 16rpx; margin-bottom: 20rpx; }
+.avatar {
+  width: 64rpx; height: 64rpx; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 26rpx; font-weight: 600; flex-shrink: 0;
+}
+.who { flex: 1; min-width: 0; }
+.nick { font-size: 28rpx; font-weight: 500; }
+.time { font-size: 22rpx; color: #999; margin-top: 2rpx; }
+.chan-badge { font-size: 20rpx; color: #07C160; background: #e8f9ef; border-radius: 8rpx; padding: 4rpx 12rpx; }
+.chan-badge.hot { color: #e6573c; background: #fdeee9; }
+.chan-badge.vibe { color: #5b6ef5; background: #eceffb; }
+
+.proj-top { display: flex; gap: 20rpx; align-items: center; margin-bottom: 16rpx; }
+.proj-logo {
+  width: 88rpx; height: 88rpx; border-radius: 20rpx; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40rpx; color: #fff; font-weight: 700;
+}
+.proj-meta { flex: 1; min-width: 0; }
+.proj-meta .name { font-size: 32rpx; font-weight: 600; }
+.proj-meta .stars { font-size: 22rpx; color: #999; margin-top: 4rpx; display: flex; align-items: center; }
+.btn-open {
+  font-size: 24rpx; color: #fff; background: #07C160;
+  border-radius: 28rpx; padding: 12rpx 28rpx; flex-shrink: 0;
+}
+
+.title { font-size: 32rpx; font-weight: 600; line-height: 1.4; margin-bottom: 12rpx; }
+.desc {
+  font-size: 26rpx; color: #666; line-height: 1.65;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.tags { display: flex; flex-wrap: wrap; gap: 12rpx; margin-top: 20rpx; }
+.tag { font-size: 22rpx; color: #07C160; background: #e8f9ef; border-radius: 8rpx; padding: 6rpx 16rpx; }
+.foot {
+  display: flex; align-items: center; gap: 40rpx; margin-top: 24rpx;
+  padding-top: 20rpx; border-top: 1rpx solid #EDEDED; font-size: 24rpx; color: #999;
+}
+.act { display: flex; align-items: center; gap: 8rpx; }
+.ci { width: 28rpx; height: 28rpx; }

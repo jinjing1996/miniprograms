@@ -1,0 +1,41 @@
+.wrap { padding: 24rpx; }
+
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.label { font-size: 26rpx; color: #999; margin-bottom: 16rpx; }
+
+.picks { display: flex; gap: 16rpx; flex-wrap: wrap; }
+
+.pick {
+  font-size: 26rpx;
+  color: #666;
+  background: #F2F2F2;
+  border-radius: 32rpx;
+  padding: 14rpx 32rpx;
+  border: 2rpx solid transparent;
+}
+
+.pick.on {
+  color: #07C160;
+  background: #e8f9ef;
+  border-color: #07C160;
+}
+
+.input { font-size: 30rpx; height: 60rpx; }
+.textarea { font-size: 30rpx; height: 240rpx; width: 100%; line-height: 1.6; }
+
+.submit {
+  margin-top: 32rpx;
+  height: 92rpx;
+  line-height: 92rpx;
+  border-radius: 46rpx;
+  background: #07C160;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 600;
+}
